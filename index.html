@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Numerical methods</title>
+<meta name="author" content="Jonathan Ulmer"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="./reveal.js-master/dist/reveal.css"/>
+
+<link rel="stylesheet" href="css/theme/unistuttgart.css" id="theme"/>
+
+<link rel="stylesheet" href="css/extra.css"/>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<section class="unis-blue-background" height="100vh" width="100vw">
+  <div class="unis-logo"></div>
+  <div class="unis-presentation-title">
+    <div>
+      <h3>Numerical methods</h3>
+    </br>
+      <h4>on the Cahn-Hilliard Equation</h4>
+      <h5></h5>
+      <h5></h5>
+    </div>
+  </div>
+  <div class="unis-presentation-author">
+    <h5>Jonathan Ulmer</h5>
+  </div>
+</section>
+
+</section>
+<section>
+<section id="slide-org957f3dd">
+<h2 id="org957f3dd">Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#/slide-org6938af4">The Cahn-Hilliard equation</a></li>
+<li><a href="#/slide-org54fc444">Baseline solver</a></li>
+<li><a href="#/slide-org6624edb">Relaxation</a></li>
+<li><a href="#/slide-org9b0bb22">Numerical Experiments</a></li>
+<li><a href="#/slide-org22a0bd9">Comparison</a></li>
+</ul>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org6938af4" class="unis-blue-background">
+<h2 id="org6938af4" class="unis-section-title">The Cahn-Hilliard equation</h2>
+</section>
+<section id="slide-org41a7279">
+<h3 id="org41a7279">Cahn-Hilliard Equation:</h3>
+<div>
+\begin{equation}
+\label{org1f8c474}
+\begin{aligned}
+\partial_{t}\phi(x,t) &=  \nabla \cdot(M(\phi)\nabla\mu), \\
+\mu &= - \varepsilon^2 \Delta\phi  + W'(\phi),
+\end{aligned}
+\end{equation}
+
+</div>
+<ul>
+<li>phase field equation for two phase flow</li>
+<li>diffuse interface equation</li>
+<li>gives position of phases</li>
+
+</ul>
+</section>
+<section style="padding: 0 20%;">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">\( M(\phi): [-1,1] \to \mathbb{R}^+ \)</td>
+<td class="org-left">Mobility coefficient</td>
+</tr>
+
+<tr>
+<td class="org-left">\( W(\phi): [-1,1] \to \mathbb{R}^+ \)</td>
+<td class="org-left">Double well potential</td>
+</tr>
+
+<tr>
+<td class="org-left">\( \varepsilon > 0 \in \mathbb{R} \)</td>
+<td class="org-left">Interface coefficient</td>
+</tr>
+
+<tr>
+<td class="org-left">\( \phi : \Omega \times (0,T) \to \mathbb{R}^d \)</td>
+<td class="org-left">Phase-field <b>variable</b></td>
+</tr>
+
+<tr>
+<td class="org-left">\( \mu : \Omega \times (0,T) \to \mathbb{R}^d \)</td>
+<td class="org-left">Chemical potential <b>variable</b></td>
+</tr>
+</tbody>
+</table>
+
+</section>
+<section>
+<ul>
+<li>constant mobility \( M(\phi) \equiv 1 \)</li>
+<li>polynomial potential \( W(\phi) = \frac{1}{4} \phi^2(1-\phi^2) \)</li>
+<li>0 Neumann boundary conditions</li>
+
+</ul>
+<div>
+\begin{equation}
+\label{orge658747}
+\begin{aligned}
+\nabla\mu \cdot \mathbf{n} &= 0 & \text{on} \, \partial\Omega &\times (0,T),\\
+\partial_n\phi &= 0 & \text{on} \, \partial\Omega &\times (0,T),
+\end{aligned}
+\end{equation}
+
+</div>
+</section>
+<section id="slide-orgc75d575">
+<h3 id="orgc75d575" class="unis-subsection-title">Properties</h3>
+<ul>
+<li>Mass conservative</li>
+<li>Total energy decreases</li>
+<li>expensive</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org54fc444" class="unis-blue-background">
+<h2 id="org54fc444" class="unis-section-title">Baseline solver</h2>
+</section>
+<section>
+<ul>
+<li>Implicit in time</li>
+<li>discretized on NxN grid</li>
+<li>uses multi-grid scheme</li>
+
+</ul>
+</section>
+<section>
+<ul>
+<li>solves equation of type</li>
+
+</ul>
+<div>
+\begin{equation}
+DL \cdot
+\begin{pmatrix}
+\phi^{n+1}_{ij} \\
+\mu^{n+\frac{1}{2}}_{ij}
+\end{pmatrix}
+= b
+\end{equation}
+
+</div>
+<p>
+where
+</p>
+
+<div style="padding: 0 20%;">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">\( b \)</td>
+<td class="org-left">collects all terms not dependant on \( \phi_{ij}^{n+1} \)</td>
+</tr>
+
+<tr>
+<td class="org-left">\( DL \)</td>
+<td class="org-left">Jacobian of \( L \)</td>
+</tr>
+
+<tr>
+<td class="org-left">\( L \)</td>
+<td class="org-left">Implicit terms in discretization</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org6624edb" class="unis-blue-background">
+<h2 id="org6624edb" class="unis-section-title">Relaxation</h2>
+</section>
+<section id="slide-org1cabb08">
+<h3 id="org1cabb08" class="unis-subsection-title">Relaxed Cahn Hilliard equation</h3>
+<div>
+\begin{equation}
+\label{orgc27d7a8}
+\begin{aligned}
+\partial_t \phi^\alpha  &= \Delta \mu \,,\\
+\mu &= \varepsilon ^2 \alpha(c^\alpha - \phi^\alpha) + W'(\phi) .
+\end{aligned}
+\end{equation}
+
+</div>
+</section>
+<section id="slide-orgf9f1987">
+<h3 id="orgf9f1987">Additional elliptical system</h3>
+<div>
+\begin{align}
+\label{orga2505b4}
+- \Delta c^\alpha  + \alpha c^a &= \alpha \phi ^\alpha,
+\end{align}
+
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org9b0bb22" class="unis-blue-background">
+<h2 id="org9b0bb22" class="unis-section-title">Numerical Experiments</h2>
+</section>
+<section id="slide-org6b00cc8">
+<h3 id="org6b00cc8">Energy</h3>
+<div style="display: grid; grid-template-columns: auto auto; padding: 5rem;">
+
+
+<div id="orgcfe34b4" class="figure">
+<p><img src="images/energy_balance.svg" alt="energy_balance.svg" class="org-svg" />
+</p>
+</div>
+
+
+<div id="org9131805" class="figure">
+<p><img src="images/relaxed-energy-balance.svg" alt="relaxed-energy-balance.svg" class="org-svg" />
+</p>
+</div>
+</section>
+<section id="slide-org156fb53">
+<h3 id="org156fb53">mass conservation</h3>
+
+<div id="orgfa45f6f" class="figure">
+<p><img src="images/relaxed-mass-balance.svg" alt="relaxed-mass-balance.svg" class="org-svg" />
+</p>
+</div>
+</section>
+<section id="slide-org1203bb8">
+<h3 id="org1203bb8">Sub iteration</h3>
+
+<div id="org2a59c1b" class="figure">
+<p><img src="images/relaxed-convergence.svg" alt="relaxed-convergence.svg" class="org-svg" />
+</p>
+</div>
+</section>
+<section id="slide-org6756bff">
+<h3 id="org6756bff">time</h3>
+
+<div id="org82b03b4" class="figure">
+<p><img src="images/relaxed-time-stability.svg" alt="relaxed-time-stability.svg" class="org-svg" />
+</p>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org22a0bd9" class="unis-blue-background">
+<h2 id="org22a0bd9" class="unis-section-title">Comparison</h2>
+</section>
+<section>
+
+
+<div id="org4e911f1" class="figure">
+<p><img src="images/relaxed-comparison.gif" alt="relaxed-comparison.gif" />
+</p>
+</div>
+
+</section>
+<section>
+
+<div style="display: grid; grid-template-columns: auto auto; padding: 5rem;">
+
+
+<div id="org378ee05" class="figure">
+<p><img src="images/relaxed-anim.gif" alt="relaxed-anim.gif" />
+</p>
+</div>
+
+
+<div id="orgf47c38b" class="figure">
+<p><img src="images/iteration.gif" alt="iteration.gif" />
+</p>
+</div>
+</section>
+</section>
+</div>
+</div>
+<script src="./reveal.js-master/dist/reveal.js"></script>
+<script src="./reveal.js-master/plugin/markdown/markdown.js"></script>
+<script src="./reveal.js-master/plugin/notes/notes.js"></script>
+<script src="./reveal.js-master/plugin/search/search.js"></script>
+<script src="./reveal.js-master/plugin/zoom/zoom.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: true,
+overview: true,
+
+transition: 'fade',
+transitionSpeed: 'default',
+width: "100%", height: "100%", margin: 0, minScale: 1, maxScale: 1,
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealZoom ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+});
+</script>
+</body>
+</html>

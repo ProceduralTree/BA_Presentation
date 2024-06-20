@@ -1,0 +1,157 @@
+#+title: Numerical methods
+#+subtitle: on the Cahn-Hilliard Equation
+#+BIBLIOGRAPHY: ~/org/resources/bibliography/refs.bib
+#+OPTIONS: timestamp:nil toc:nil num:nil
+#+PROPERTY: header-args:julia :output-dir images :eval never :noweb no-export
+#+PROPERTY: header-args:julia-vterm :output-dir images :exports results :noweb no-export :eval yes :session jl :cache yes
+#+REVEAL_THEME: css/theme/unistuttgart.css
+#+reveal_academic_title: t
+#+reveal_extra_options: width: "100%", height: "100%", margin: 0, minScale: 1, maxScale: 1
+#+reveal_title_slide: title.html
+#+reveal_trans: fade
+#+reveal_extra_css: css/extra.css
+# #+OPTIONS: reveal_single_file:t
+#+REVEAL_ROOT: ./reveal.js-master
+
+
+
+* Table of Contents
+:PROPERTIES:
+ :UNNUMBERED: notoc
+:END:
+
+#+reveal_toc:  headlines:1
+* The Cahn-Hilliard equation
+:PROPERTIES:
+:html_headline_class: unis-section-title
+:reveal_extra_attr: class="unis-blue-background"
+:END:
+
+** Cahn-Hilliard Equation:
+#+name: eq:CH
+\begin{equation}
+\begin{aligned}
+\partial_{t}\phi(x,t) &=  \nabla \cdot(M(\phi)\nabla\mu), \\
+\mu &= - \varepsilon^2 \Delta\phi  + W'(\phi),
+\end{aligned}
+\end{equation}
++ phase field equation for two phase flow
++ diffuse interface equation
++ gives position of phases
+#+reveal: split style="padding: 0 20%;"
+| \( M(\phi): [-1,1] \to \mathbb{R}^+ \)  | Mobility coefficient        |
+| \( W(\phi): [-1,1] \to \mathbb{R}^+ \)  | Double well potential       |
+| \( \varepsilon > 0 \in \mathbb{R} \)           | Interface coefficient       |
+| \( \phi : \Omega \times (0,T) \to \mathbb{R}^d \) | Phase-field *variable*      |
+| \( \mu : \Omega \times (0,T) \to \mathbb{R}^d \) | Chemical potential *variable* |
+
+#+reveal: split
++ constant mobility \( M(\phi) \equiv 1 \)
++ polynomial potential \( W(\phi) = \frac{1}{4} \phi^2(1-\phi^2) \)
++ 0 Neumann boundary conditions
+#+name: eq:boundary-conditions
+\begin{equation}
+\begin{aligned}
+\nabla\mu \cdot \mathbf{n} &= 0 & \text{on} \, \partial\Omega &\times (0,T),\\
+\partial_n\phi &= 0 & \text{on} \, \partial\Omega &\times (0,T),
+\end{aligned}
+\end{equation}
+** Properties
+:PROPERTIES:
+:html_headline_class: unis-subsection-title
+:END:
++ Mass conservative
++ Total energy decreases
++ expensive
+* Baseline solver
+:PROPERTIES:
+:html_headline_class: unis-section-title
+:reveal_extra_attr: class="unis-blue-background"
+:END:
+
+#+REVEAL: split
++ Implicit in time
++ discretized on NxN grid
++ uses multi-grid scheme
+#+REVEAL: split
++ solves equation of type
+\begin{equation}
+DL \cdot
+\begin{pmatrix}
+\phi^{n+1}_{ij} \\
+\mu^{n+\frac{1}{2}}_{ij}
+\end{pmatrix}
+= b
+\end{equation}
+where
+
+#+reveal_html: <div style="padding: 0 20%;">
+| \( b \)  | collects all terms not dependant on \( \phi_{ij}^{n+1} \) |
+| \( DL \) | Jacobian of \( L \)                                    |
+| \( L \)  | Implicit terms in discretization                       |
+#+reveal_html: </div>
+* Relaxation
+:PROPERTIES:
+:html_headline_class: unis-section-title
+:reveal_extra_attr: class="unis-blue-background"
+:END:
+** Relaxed Cahn Hilliard equation
+:PROPERTIES:
+:html_headline_class: unis-subsection-title
+:END:
+#+name: eq:relaxed-cahn-hilliard
+\begin{equation}
+\begin{aligned}
+\partial_t \phi^\alpha  &= \Delta \mu \,,\\
+\mu &= \varepsilon ^2 \alpha(c^\alpha - \phi^\alpha) + W'(\phi) .
+\end{aligned}
+\end{equation}
+
+** Additional elliptical system
+#+name: eq:elliptical-equation
+\begin{align}
+- \Delta c^\alpha  + \alpha c^a &= \alpha \phi ^\alpha,
+\end{align}
+* Numerical Experiments
+:PROPERTIES:
+:html_headline_class: unis-section-title
+:reveal_extra_attr: class="unis-blue-background"
+:END:
+** Energy
+#+REVEAL_HTML: <div style="display: grid; grid-template-columns: auto auto; padding: 5rem;">
+
+#+name: fig:energy-balance
+[[file:images/energy_balance.svg]]
+
+#+name: fig:relaxed-energy-balance
+[[file:images/relaxed-energy-balance.svg]]
+
+** mass conservation
+
+#+name: fig:relaxed-mass-balance
+[[file:images/relaxed-mass-balance.svg]]
+** Sub iteration
+#+name: fig:relaxed-convergence
+[[file:images/relaxed-convergence.svg]]
+** time
+#+name: fig:relaxed-stability-in-time
+[[file:images/relaxed-time-stability.svg]]
+* Comparison
+:PROPERTIES:
+:html_headline_class: unis-section-title
+:reveal_extra_attr: class="unis-blue-background"
+:END:
+
+#+REVEAL: split
+
+[[file:images/relaxed-comparison.gif]]
+
+#+REVEAL: split
+
+#+REVEAL_HTML: <div style="display: grid; grid-template-columns: auto auto; padding: 5rem;">
+
+#+name: fig:relaxed-anim
+[[file:images/relaxed-anim.gif]]
+
+#+name: fig:solver-iteration
+[[file:images/iteration.gif]]
