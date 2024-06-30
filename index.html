@@ -7,7 +7,7 @@
 <style type="text/css">
 .underline { text-decoration: underline; }
 </style>
-<link rel="stylesheet" href="./reveal.js-master/dist/reveal.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.css"/>
 
 <link rel="stylesheet" href="css/theme/unistuttgart.css" id="theme"/>
 
@@ -36,43 +36,26 @@
 
 </section>
 <section>
-<section id="slide-org957f3dd">
-<h2 id="org957f3dd">Table of Contents</h2>
+<section id="slide-org8f9ed21">
+<h2 id="org8f9ed21">Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#/slide-org6938af4">The Cahn-Hilliard equation</a></li>
-<li><a href="#/slide-org54fc444">Baseline solver</a></li>
-<li><a href="#/slide-org6624edb">Relaxation</a></li>
-<li><a href="#/slide-org9b0bb22">Numerical Experiments</a></li>
-<li><a href="#/slide-org22a0bd9">Comparison</a></li>
+<li><a href="#/slide-orgfe85f9e">The Cahn-Hilliard equation</a></li>
+<li><a href="#/slide-org89f5dda">Baseline solver</a></li>
+<li><a href="#/slide-orgbffe890">Relaxation</a></li>
+<li><a href="#/slide-org3509b59">Numerical Experiments</a></li>
+<li><a href="#/slide-org2eef0e0">Comparison</a></li>
+<li><a href="#/slide-org99df858">Conclusion</a></li>
 </ul>
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org6938af4" class="unis-blue-background">
-<h2 id="org6938af4" class="unis-section-title">The Cahn-Hilliard equation</h2>
+<section id="slide-orgfe85f9e" class="unis-blue-background">
+<h2 id="orgfe85f9e" class="unis-section-title">The Cahn-Hilliard equation</h2>
 </section>
-<section id="slide-org41a7279">
-<h3 id="org41a7279">Cahn-Hilliard Equation:</h3>
-<div>
-\begin{equation}
-\label{org1f8c474}
-\begin{aligned}
-\partial_{t}\phi(x,t) &=  \nabla \cdot(M(\phi)\nabla\mu), \\
-\mu &= - \varepsilon^2 \Delta\phi  + W'(\phi),
-\end{aligned}
-\end{equation}
-
-</div>
-<ul>
-<li>phase field equation for two phase flow</li>
-<li>diffuse interface equation</li>
-<li>gives position of phases</li>
-
-</ul>
-</section>
-<section style="padding: 0 20%;">
+<section id="slide-orga8d23bf" style="padding 0 20%;">
+<h3 id="orga8d23bf">Variables</h3>
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -108,6 +91,25 @@
 </tr>
 </tbody>
 </table>
+</section>
+<section id="slide-org0b70f06">
+<h3 id="org0b70f06">Cahn-Hilliard Equation:</h3>
+<div>
+\begin{equation}
+\label{org26929e7}
+\begin{aligned}
+\partial_{t}\phi(x,t) &=  \nabla \cdot(M(\phi)\nabla\mu), \\
+\mu &= - \varepsilon^2 \Delta\phi  + W'(\phi),
+\end{aligned}
+\end{equation}
+
+</div>
+<ul>
+<li>phase field equation for two phase flow</li>
+<li>diffuse interface equation</li>
+<li>gives position of phases</li>
+
+</ul>
 
 </section>
 <section>
@@ -119,7 +121,7 @@
 </ul>
 <div>
 \begin{equation}
-\label{orge658747}
+\label{org8a71c79}
 \begin{aligned}
 \nabla\mu \cdot \mathbf{n} &= 0 & \text{on} \, \partial\Omega &\times (0,T),\\
 \partial_n\phi &= 0 & \text{on} \, \partial\Omega &\times (0,T),
@@ -128,8 +130,8 @@
 
 </div>
 </section>
-<section id="slide-orgc75d575">
-<h3 id="orgc75d575" class="unis-subsection-title">Properties</h3>
+<section id="slide-org69d9398">
+<h3 id="org69d9398" class="unis-subsection-title">Properties</h3>
 <ul>
 <li>Mass conservative</li>
 <li>Total energy decreases</li>
@@ -139,8 +141,8 @@
 </section>
 </section>
 <section>
-<section id="slide-org54fc444" class="unis-blue-background">
-<h2 id="org54fc444" class="unis-section-title">Baseline solver</h2>
+<section id="slide-org89f5dda" class="unis-blue-background">
+<h2 id="org89f5dda" class="unis-section-title">Baseline solver</h2>
 </section>
 <section>
 <ul>
@@ -150,27 +152,7 @@
 
 </ul>
 </section>
-<section>
-<ul>
-<li>solves equation of type</li>
-
-</ul>
-<div>
-\begin{equation}
-DL \cdot
-\begin{pmatrix}
-\phi^{n+1}_{ij} \\
-\mu^{n+\frac{1}{2}}_{ij}
-\end{pmatrix}
-= b
-\end{equation}
-
-</div>
-<p>
-where
-</p>
-
-<div style="padding: 0 20%;">
+<section style="padding: 0 20%;">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -192,22 +174,50 @@ where
 
 <tr>
 <td class="org-left">\( L \)</td>
-<td class="org-left">Implicit terms in discretization</td>
+<td class="org-left">Implicit terms of the discrete CH equation</td>
+</tr>
+
+<tr>
+<td class="org-left">\( \Omega_d \)</td>
+<td class="org-left">discrete version of the computational domain \( \Omega \)</td>
 </tr>
 </tbody>
 </table>
+</section>
+<section>
+<ul>
+<li>solves equation of type</li>
+
+</ul>
+<div>
+\begin{equation}
+DL \cdot
+\begin{pmatrix}
+\phi^{n+1}_{ij} \\
+\mu^{n+\frac{1}{2}}_{ij}
+\end{pmatrix}
+= b
+\end{equation}
+
 </div>
+<ul>
+<li>with Gauss Seidel iteration</li>
+<li>for every point \( (i,j) \in \Omega_d \)</li>
+<li>on two grid scales</li>
+<li>multiple times per sub-iteration</li>
+
+</ul>
 </section>
 </section>
 <section>
-<section id="slide-org6624edb" class="unis-blue-background">
-<h2 id="org6624edb" class="unis-section-title">Relaxation</h2>
+<section id="slide-orgbffe890" class="unis-blue-background">
+<h2 id="orgbffe890" class="unis-section-title">Relaxation</h2>
 </section>
-<section id="slide-org1cabb08">
-<h3 id="org1cabb08" class="unis-subsection-title">Relaxed Cahn Hilliard equation</h3>
+<section id="slide-org417dbb6">
+<h3 id="org417dbb6" class="unis-subsection-title">Relaxed Cahn Hilliard equation</h3>
 <div>
 \begin{equation}
-\label{orgc27d7a8}
+\label{orgff33a97}
 \begin{aligned}
 \partial_t \phi^\alpha  &= \Delta \mu \,,\\
 \mu &= \varepsilon ^2 \alpha(c^\alpha - \phi^\alpha) + W'(\phi) .
@@ -215,71 +225,90 @@ where
 \end{equation}
 
 </div>
+<p>
+where  \( \alpha < 0 \)  is a relaxation parameter
+</p>
 </section>
-<section id="slide-orgf9f1987">
-<h3 id="orgf9f1987">Additional elliptical system</h3>
+<section id="slide-org40f793f">
+<h3 id="org40f793f">Additional elliptical system</h3>
 <div>
 \begin{align}
-\label{orga2505b4}
+\label{org7e694a2}
 - \Delta c^\alpha  + \alpha c^a &= \alpha \phi ^\alpha,
 \end{align}
 
 </div>
+<ul>
+<li>requires solving an additional equation for \( c \)</li>
+<li>two dependant equations</li>
+<li>two one dimensional second order equations</li>
+<li>solved similar to the baseline equation</li>
+
+</ul>
+</section>
+<section id="slide-org7b534bb">
+<h3 id="org7b534bb">Implementation</h3>
+<ul>
+<li>implicit in \( c \)</li>
+<li>solves both equations in tandem</li>
+<li>resolving \( c \) during each sub-iteration required</li>
+
+</ul>
 </section>
 </section>
 <section>
-<section id="slide-org9b0bb22" class="unis-blue-background">
-<h2 id="org9b0bb22" class="unis-section-title">Numerical Experiments</h2>
+<section id="slide-org3509b59" class="unis-blue-background">
+<h2 id="org3509b59" class="unis-section-title">Numerical Experiments</h2>
 </section>
-<section id="slide-org6b00cc8">
-<h3 id="org6b00cc8">Energy</h3>
+<section id="slide-org48329ef">
+<h3 id="org48329ef">Energy</h3>
 <div style="display: grid; grid-template-columns: auto auto; padding: 5rem;">
 
 
-<div id="orgcfe34b4" class="figure">
+<div id="org418a641" class="figure">
 <p><img src="images/energy_balance.svg" alt="energy_balance.svg" class="org-svg" />
 </p>
 </div>
 
 
-<div id="org9131805" class="figure">
+<div id="orga7dcbee" class="figure">
 <p><img src="images/relaxed-energy-balance.svg" alt="relaxed-energy-balance.svg" class="org-svg" />
 </p>
 </div>
 </section>
-<section id="slide-org156fb53">
-<h3 id="org156fb53">mass conservation</h3>
+<section id="slide-org2b9508e">
+<h3 id="org2b9508e">mass conservation</h3>
 
-<div id="orgfa45f6f" class="figure">
+<div id="orgc623ef5" class="figure">
 <p><img src="images/relaxed-mass-balance.svg" alt="relaxed-mass-balance.svg" class="org-svg" />
 </p>
 </div>
 </section>
-<section id="slide-org1203bb8">
-<h3 id="org1203bb8">Sub iteration</h3>
+<section id="slide-org22379b2">
+<h3 id="org22379b2">Sub iteration</h3>
 
-<div id="org2a59c1b" class="figure">
+<div id="org5c2c57e" class="figure">
 <p><img src="images/relaxed-convergence.svg" alt="relaxed-convergence.svg" class="org-svg" />
 </p>
 </div>
 </section>
-<section id="slide-org6756bff">
-<h3 id="org6756bff">time</h3>
+<section id="slide-orge8e588f">
+<h3 id="orge8e588f">time</h3>
 
-<div id="org82b03b4" class="figure">
+<div id="orgf7fb88e" class="figure">
 <p><img src="images/relaxed-time-stability.svg" alt="relaxed-time-stability.svg" class="org-svg" />
 </p>
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org22a0bd9" class="unis-blue-background">
-<h2 id="org22a0bd9" class="unis-section-title">Comparison</h2>
+<section id="slide-org2eef0e0" class="unis-blue-background">
+<h2 id="org2eef0e0" class="unis-section-title">Comparison</h2>
 </section>
 <section>
 
 
-<div id="org4e911f1" class="figure">
+<div id="org36aba22" class="figure">
 <p><img src="images/relaxed-comparison.gif" alt="relaxed-comparison.gif" />
 </p>
 </div>
@@ -290,25 +319,30 @@ where
 <div style="display: grid; grid-template-columns: auto auto; padding: 5rem;">
 
 
-<div id="org378ee05" class="figure">
+<div id="orgbee1d72" class="figure">
 <p><img src="images/relaxed-anim.gif" alt="relaxed-anim.gif" />
 </p>
 </div>
 
 
-<div id="orgf47c38b" class="figure">
+<div id="org2b8222c" class="figure">
 <p><img src="images/iteration.gif" alt="iteration.gif" />
 </p>
 </div>
 </section>
 </section>
+<section>
+<section id="slide-org99df858">
+<h2 id="org99df858">Conclusion</h2>
+</section>
+</section>
 </div>
 </div>
-<script src="./reveal.js-master/dist/reveal.js"></script>
-<script src="./reveal.js-master/plugin/markdown/markdown.js"></script>
-<script src="./reveal.js-master/plugin/notes/notes.js"></script>
-<script src="./reveal.js-master/plugin/search/search.js"></script>
-<script src="./reveal.js-master/plugin/zoom/zoom.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js/plugin/markdown/markdown.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js/plugin/notes/notes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js/plugin/search/search.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js/plugin/zoom/zoom.js"></script>
 <script>
 // Full list of configuration options available here:
 // https://github.com/hakimel/reveal.js#configuration

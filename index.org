@@ -10,9 +10,9 @@
 #+reveal_title_slide: title.html
 #+reveal_trans: fade
 #+reveal_extra_css: css/extra.css
-# #+OPTIONS: reveal_single_file:t
-#+REVEAL_ROOT: ./reveal.js-master
-
+# #+OPTIONS: reveal_single_file:t#
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+# #+REVEAL_ROOT: ./reveal.js-master
 
 
 * Table of Contents
@@ -21,12 +21,28 @@
 :END:
 
 #+reveal_toc:  headlines:1
+* Introduction :noexport:
+:PROPERTIES:
+:html_headline_class: unis-section-title
+:reveal_extra_attr: class="unis-blue-background"
+:END:
+** uses
++ multiphase coupling equation
 * The Cahn-Hilliard equation
 :PROPERTIES:
 :html_headline_class: unis-section-title
 :reveal_extra_attr: class="unis-blue-background"
 :END:
+** Variables
+:PROPERTIES:
+:reveal_extra_attr: style="padding 0 20%;"
+:END:
 
+| \( M(\phi): [-1,1] \to \mathbb{R}^+ \)  | Mobility coefficient        |
+| \( W(\phi): [-1,1] \to \mathbb{R}^+ \)  | Double well potential       |
+| \( \varepsilon > 0 \in \mathbb{R} \)           | Interface coefficient       |
+| \( \phi : \Omega \times (0,T) \to \mathbb{R}^d \) | Phase-field *variable*        |
+| \( \mu : \Omega \times (0,T) \to \mathbb{R}^d \) | Chemical potential *variable* |
 ** Cahn-Hilliard Equation:
 #+name: eq:CH
 \begin{equation}
@@ -38,12 +54,6 @@
 + phase field equation for two phase flow
 + diffuse interface equation
 + gives position of phases
-#+reveal: split style="padding: 0 20%;"
-| \( M(\phi): [-1,1] \to \mathbb{R}^+ \)  | Mobility coefficient        |
-| \( W(\phi): [-1,1] \to \mathbb{R}^+ \)  | Double well potential       |
-| \( \varepsilon > 0 \in \mathbb{R} \)           | Interface coefficient       |
-| \( \phi : \Omega \times (0,T) \to \mathbb{R}^d \) | Phase-field *variable*      |
-| \( \mu : \Omega \times (0,T) \to \mathbb{R}^d \) | Chemical potential *variable* |
 
 #+reveal: split
 + constant mobility \( M(\phi) \equiv 1 \)
@@ -73,6 +83,11 @@
 + Implicit in time
 + discretized on NxN grid
 + uses multi-grid scheme
+#+reveal: split style="padding: 0 20%;"
+| \( b \)   | collects all terms not dependant on \( \phi_{ij}^{n+1} \) |
+| \( DL \)  | Jacobian of \( L \)                                    |
+| \( L \)   | Implicit terms of the discrete CH equation |
+| \( \Omega_d \) | discrete version of the computational domain \( \Omega \)   |
 #+REVEAL: split
 + solves equation of type
 \begin{equation}
@@ -83,13 +98,10 @@ DL \cdot
 \end{pmatrix}
 = b
 \end{equation}
-where
-
-#+reveal_html: <div style="padding: 0 20%;">
-| \( b \)  | collects all terms not dependant on \( \phi_{ij}^{n+1} \) |
-| \( DL \) | Jacobian of \( L \)                                    |
-| \( L \)  | Implicit terms in discretization                       |
-#+reveal_html: </div>
++ with Gauss Seidel iteration
++ for every point \( (i,j) \in \Omega_d \)
++ on two grid scales
++ multiple times per sub-iteration
 * Relaxation
 :PROPERTIES:
 :html_headline_class: unis-section-title
@@ -106,12 +118,21 @@ where
 \mu &= \varepsilon ^2 \alpha(c^\alpha - \phi^\alpha) + W'(\phi) .
 \end{aligned}
 \end{equation}
+where  \( \alpha < 0 \)  is a relaxation parameter
 
 ** Additional elliptical system
 #+name: eq:elliptical-equation
 \begin{align}
 - \Delta c^\alpha  + \alpha c^a &= \alpha \phi ^\alpha,
 \end{align}
++ requires solving an additional equation for \( c \)
++ two dependant equations
++ two one dimensional second order equations
++ solved similar to the baseline equation
+**  Implementation
++ implicit in \( c \)
++ solves both equations in tandem
++ resolving \( c \) during each sub-iteration required
 * Numerical Experiments
 :PROPERTIES:
 :html_headline_class: unis-section-title
@@ -155,3 +176,5 @@ where
 
 #+name: fig:solver-iteration
 [[file:images/iteration.gif]]
+
+* Conclusion
