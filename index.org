@@ -60,6 +60,7 @@
 + phase field equation for two phase flow
 + diffuse interface equation
 + gives position of phases
++ 4th order (2 dimensional second order)
 
 #+reveal: split
 + constant mobility \( M(\phi) \equiv 1 \)
@@ -115,6 +116,11 @@ DL \cdot
 :html_headline_class: unis-section-title
 :reveal_extra_attr: class="unis-blue-background"
 :END:
+** Variables
+#+Reveal_html: <div style="display: flex;justify-content: center;">
+| \( \alpha > 0 \) | relaxation parameter |
+| \( c^{\alpha}:\Omega \times (0,T) \to \mathbb{R}^d \)  | solution of an elliptical system |
+#+Reveal_html: </div>
 ** Relaxed Cahn Hilliard equation
 :PROPERTIES:
 :html_headline_class: unis-subsection-title
@@ -126,7 +132,8 @@ DL \cdot
 \mu &= \varepsilon ^2 \alpha(c^\alpha - \phi^\alpha) + W'(\phi) .
 \end{aligned}
 \end{equation}
-where  \( \alpha < 0 \)  is a relaxation parameter
++ simpler PDE
++ second order
 
 ** Additional elliptical system
 #+name: eq:elliptical-equation
