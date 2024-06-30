@@ -36,26 +36,27 @@
 
 </section>
 <section>
-<section id="slide-org8f9ed21">
-<h2 id="org8f9ed21">Table of Contents</h2>
+<section id="slide-org2484aa5">
+<h2 id="org2484aa5">Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#/slide-orgfe85f9e">The Cahn-Hilliard equation</a></li>
-<li><a href="#/slide-org89f5dda">Baseline solver</a></li>
-<li><a href="#/slide-orgbffe890">Relaxation</a></li>
-<li><a href="#/slide-org3509b59">Numerical Experiments</a></li>
-<li><a href="#/slide-org2eef0e0">Comparison</a></li>
-<li><a href="#/slide-org99df858">Conclusion</a></li>
+<li><a href="#/slide-org0a2bbba">The Cahn-Hilliard equation</a></li>
+<li><a href="#/slide-orgb8db0f2">Baseline solver</a></li>
+<li><a href="#/slide-org04c2da8">Relaxation</a></li>
+<li><a href="#/slide-orgd3b61ca">Numerical Experiments</a></li>
+<li><a href="#/slide-orga5117d1">Comparison</a></li>
+<li><a href="#/slide-org690c042">Conclusion</a></li>
 </ul>
 </div>
 </section>
 </section>
 <section>
-<section id="slide-orgfe85f9e" class="unis-blue-background">
-<h2 id="orgfe85f9e" class="unis-section-title">The Cahn-Hilliard equation</h2>
+<section id="slide-org0a2bbba" class="unis-blue-background">
+<h2 id="org0a2bbba" class="unis-section-title">The Cahn-Hilliard equation</h2>
 </section>
-<section id="slide-orga8d23bf" style="padding 0 20%;">
-<h3 id="orga8d23bf">Variables</h3>
+<section id="slide-org6eb7f79">
+<h3 id="org6eb7f79">Variables</h3>
+<div style="display: flex;justify-content: center;">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -91,12 +92,28 @@
 </tr>
 </tbody>
 </table>
+</div>
 </section>
-<section id="slide-org0b70f06">
-<h3 id="org0b70f06">Cahn-Hilliard Equation:</h3>
+<section>
+<div style="display: grid; grid-template-columns: auto auto; padding: 5rem; justify-content: center">
+
+<div id="org97806f2" class="figure">
+<p><img src="images/domain.svg" alt="domain.svg" class="org-svg" />
+</p>
+<p><span class="figure-number">Figure 1: </span>Computational Domain \( \Omega \)</p>
+</div>
+
+<div id="org44a3f11" class="figure">
+<p><img src="images/double-well.svg" alt="double-well.svg" class="org-svg" />
+</p>
+<p><span class="figure-number">Figure 2: </span>Double well potential \( W(\phi) \)</p>
+</div>
+</section>
+<section id="slide-org044c5f1">
+<h3 id="org044c5f1">Cahn-Hilliard Equation:</h3>
 <div>
 \begin{equation}
-\label{org26929e7}
+\label{orgb409cba}
 \begin{aligned}
 \partial_{t}\phi(x,t) &=  \nabla \cdot(M(\phi)\nabla\mu), \\
 \mu &= - \varepsilon^2 \Delta\phi  + W'(\phi),
@@ -121,7 +138,7 @@
 </ul>
 <div>
 \begin{equation}
-\label{org8a71c79}
+\label{orgd208f60}
 \begin{aligned}
 \nabla\mu \cdot \mathbf{n} &= 0 & \text{on} \, \partial\Omega &\times (0,T),\\
 \partial_n\phi &= 0 & \text{on} \, \partial\Omega &\times (0,T),
@@ -130,8 +147,8 @@
 
 </div>
 </section>
-<section id="slide-org69d9398">
-<h3 id="org69d9398" class="unis-subsection-title">Properties</h3>
+<section id="slide-org2327f7b">
+<h3 id="org2327f7b" class="unis-subsection-title">Properties</h3>
 <ul>
 <li>Mass conservative</li>
 <li>Total energy decreases</li>
@@ -141,8 +158,8 @@
 </section>
 </section>
 <section>
-<section id="slide-org89f5dda" class="unis-blue-background">
-<h2 id="org89f5dda" class="unis-section-title">Baseline solver</h2>
+<section id="slide-orgb8db0f2" class="unis-blue-background">
+<h2 id="orgb8db0f2" class="unis-section-title">Baseline solver</h2>
 </section>
 <section>
 <ul>
@@ -152,7 +169,9 @@
 
 </ul>
 </section>
-<section style="padding: 0 20%;">
+<section id="slide-org80ec677">
+<h3 id="org80ec677">Variables</h3>
+<div style="display: flex;justify-content: center;">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -183,6 +202,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 </section>
 <section>
 <ul>
@@ -210,14 +230,14 @@ DL \cdot
 </section>
 </section>
 <section>
-<section id="slide-orgbffe890" class="unis-blue-background">
-<h2 id="orgbffe890" class="unis-section-title">Relaxation</h2>
+<section id="slide-org04c2da8" class="unis-blue-background">
+<h2 id="org04c2da8" class="unis-section-title">Relaxation</h2>
 </section>
-<section id="slide-org417dbb6">
-<h3 id="org417dbb6" class="unis-subsection-title">Relaxed Cahn Hilliard equation</h3>
+<section id="slide-orgaa95e4e">
+<h3 id="orgaa95e4e" class="unis-subsection-title">Relaxed Cahn Hilliard equation</h3>
 <div>
 \begin{equation}
-\label{orgff33a97}
+\label{orga2003f6}
 \begin{aligned}
 \partial_t \phi^\alpha  &= \Delta \mu \,,\\
 \mu &= \varepsilon ^2 \alpha(c^\alpha - \phi^\alpha) + W'(\phi) .
@@ -229,11 +249,11 @@ DL \cdot
 where  \( \alpha < 0 \)  is a relaxation parameter
 </p>
 </section>
-<section id="slide-org40f793f">
-<h3 id="org40f793f">Additional elliptical system</h3>
+<section id="slide-org4c868a5">
+<h3 id="org4c868a5">Additional elliptical system</h3>
 <div>
 \begin{align}
-\label{org7e694a2}
+\label{org5f2142b}
 - \Delta c^\alpha  + \alpha c^a &= \alpha \phi ^\alpha,
 \end{align}
 
@@ -246,8 +266,8 @@ where  \( \alpha < 0 \)  is a relaxation parameter
 
 </ul>
 </section>
-<section id="slide-org7b534bb">
-<h3 id="org7b534bb">Implementation</h3>
+<section id="slide-org49d8d49">
+<h3 id="org49d8d49">Implementation</h3>
 <ul>
 <li>implicit in \( c \)</li>
 <li>solves both equations in tandem</li>
@@ -257,58 +277,56 @@ where  \( \alpha < 0 \)  is a relaxation parameter
 </section>
 </section>
 <section>
-<section id="slide-org3509b59" class="unis-blue-background">
-<h2 id="org3509b59" class="unis-section-title">Numerical Experiments</h2>
+<section id="slide-orgd3b61ca" class="unis-blue-background">
+<h2 id="orgd3b61ca" class="unis-section-title">Numerical Experiments</h2>
 </section>
-<section id="slide-org48329ef">
-<h3 id="org48329ef">Energy</h3>
+<section id="slide-orgd2175e8">
+<h3 id="orgd2175e8">Energy</h3>
 <div style="display: grid; grid-template-columns: auto auto; padding: 5rem;">
 
 
-<div id="org418a641" class="figure">
-<p><img src="images/energy_balance.svg" alt="energy_balance.svg" class="org-svg" />
-</p>
-</div>
-
-
-<div id="orga7dcbee" class="figure">
+<div id="org6e35683" class="figure">
 <p><img src="images/relaxed-energy-balance.svg" alt="relaxed-energy-balance.svg" class="org-svg" />
 </p>
+<p><span class="figure-number">Figure 3: </span>Discrete Energy decrease in both solvers</p>
 </div>
 </section>
-<section id="slide-org2b9508e">
-<h3 id="org2b9508e">mass conservation</h3>
+<section id="slide-org5b39a3d">
+<h3 id="org5b39a3d">mass conservation</h3>
 
-<div id="orgc623ef5" class="figure">
+<div id="org8e47a22" class="figure">
 <p><img src="images/relaxed-mass-balance.svg" alt="relaxed-mass-balance.svg" class="org-svg" />
 </p>
+<p><span class="figure-number">Figure 4: </span>relaxed energy conservation for both solvers</p>
 </div>
 </section>
-<section id="slide-org22379b2">
-<h3 id="org22379b2">Sub iteration</h3>
+<section id="slide-orgc7139c9">
+<h3 id="orgc7139c9">Sub iteration</h3>
 
-<div id="org5c2c57e" class="figure">
+<div id="org21d52ca" class="figure">
 <p><img src="images/relaxed-convergence.svg" alt="relaxed-convergence.svg" class="org-svg" />
 </p>
+<p><span class="figure-number">Figure 5: </span>Behaviour of both solvers during sub-iterations</p>
 </div>
 </section>
-<section id="slide-orge8e588f">
-<h3 id="orge8e588f">time</h3>
+<section id="slide-org886875b">
+<h3 id="org886875b">time</h3>
 
-<div id="orgf7fb88e" class="figure">
+<div id="org9c72d34" class="figure">
 <p><img src="images/relaxed-time-stability.svg" alt="relaxed-time-stability.svg" class="org-svg" />
 </p>
+<p><span class="figure-number">Figure 6: </span>Behaviour of both solvers when varying time-step size</p>
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org2eef0e0" class="unis-blue-background">
-<h2 id="org2eef0e0" class="unis-section-title">Comparison</h2>
+<section id="slide-orga5117d1" class="unis-blue-background">
+<h2 id="orga5117d1" class="unis-section-title">Comparison</h2>
 </section>
 <section>
 
 
-<div id="org36aba22" class="figure">
+<div id="org5e6cdf9" class="figure">
 <p><img src="images/relaxed-comparison.gif" alt="relaxed-comparison.gif" />
 </p>
 </div>
@@ -319,21 +337,21 @@ where  \( \alpha < 0 \)  is a relaxation parameter
 <div style="display: grid; grid-template-columns: auto auto; padding: 5rem;">
 
 
-<div id="orgbee1d72" class="figure">
+<div id="org647fc1b" class="figure">
 <p><img src="images/relaxed-anim.gif" alt="relaxed-anim.gif" />
 </p>
 </div>
 
 
-<div id="org2b8222c" class="figure">
+<div id="org0fb7d67" class="figure">
 <p><img src="images/iteration.gif" alt="iteration.gif" />
 </p>
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org99df858">
-<h2 id="org99df858">Conclusion</h2>
+<section id="slide-org690c042">
+<h2 id="org690c042">Conclusion</h2>
 </section>
 </section>
 </div>

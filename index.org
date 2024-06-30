@@ -34,15 +34,21 @@
 :reveal_extra_attr: class="unis-blue-background"
 :END:
 ** Variables
-:PROPERTIES:
-:reveal_extra_attr: style="padding 0 20%;"
-:END:
-
+#+Reveal_html: <div style="display: flex;justify-content: center;">
 | \( M(\phi): [-1,1] \to \mathbb{R}^+ \)  | Mobility coefficient        |
 | \( W(\phi): [-1,1] \to \mathbb{R}^+ \)  | Double well potential       |
 | \( \varepsilon > 0 \in \mathbb{R} \)           | Interface coefficient       |
 | \( \phi : \Omega \times (0,T) \to \mathbb{R}^d \) | Phase-field *variable*        |
 | \( \mu : \Omega \times (0,T) \to \mathbb{R}^d \) | Chemical potential *variable* |
+#+reveal_html: </div>
+#+reveal: split
+#+REVEAL_HTML: <div style="display: grid; grid-template-columns: auto auto; padding: 5rem; justify-content: center">
+#+caption: Computational Domain \( \Omega \)
+#+name: fig:domain
+[[file:images/domain.svg]]
+#+caption: Double well potential \( W(\phi) \)
+#+name: fig:double-well
+[[file:images/double-well.svg]]
 ** Cahn-Hilliard Equation:
 #+name: eq:CH
 \begin{equation}
@@ -83,11 +89,13 @@
 + Implicit in time
 + discretized on NxN grid
 + uses multi-grid scheme
-#+reveal: split style="padding: 0 20%;"
+** Variables
+#+Reveal_html: <div style="display: flex;justify-content: center;">
 | \( b \)   | collects all terms not dependant on \( \phi_{ij}^{n+1} \) |
 | \( DL \)  | Jacobian of \( L \)                                    |
 | \( L \)   | Implicit terms of the discrete CH equation |
 | \( \Omega_d \) | discrete version of the computational domain \( \Omega \)   |
+#+Reveal_html: </div>
 #+REVEAL: split
 + solves equation of type
 \begin{equation}
@@ -141,20 +149,21 @@ where  \( \alpha < 0 \)  is a relaxation parameter
 ** Energy
 #+REVEAL_HTML: <div style="display: grid; grid-template-columns: auto auto; padding: 5rem;">
 
-#+name: fig:energy-balance
-[[file:images/energy_balance.svg]]
-
+#+caption: Discrete Energy decrease in both solvers
 #+name: fig:relaxed-energy-balance
 [[file:images/relaxed-energy-balance.svg]]
 
 ** mass conservation
 
+#+caption: relaxed energy conservation for both solvers
 #+name: fig:relaxed-mass-balance
 [[file:images/relaxed-mass-balance.svg]]
 ** Sub iteration
+#+caption: Behaviour of both solvers during sub-iterations
 #+name: fig:relaxed-convergence
 [[file:images/relaxed-convergence.svg]]
 ** time
+#+caption: Behaviour of both solvers when varying time-step size
 #+name: fig:relaxed-stability-in-time
 [[file:images/relaxed-time-stability.svg]]
 * Comparison
