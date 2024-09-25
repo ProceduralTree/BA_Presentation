@@ -50,6 +50,10 @@
 #+name: fig:double-well
 [[file:images/double-well.svg]]
 ** Cahn-Hilliard Equation:
+:PROPERTIES:
+:reveal_extra_attr: data-auto-animate
+:END:
+#+ATTR_REVEAL: :data-id eq
 #+name: eq:CH
 \begin{equation}
 \begin{aligned}
@@ -57,26 +61,18 @@
 \mu &= - \varepsilon^2 \Delta\phi  + W'(\phi),
 \end{aligned}
 \end{equation}
+
+#+attr_reveal: :frag (appear)
 + phase field equation for two phase flow
 + diffuse interface equation
 + gives position of phases
 + 4th order (2 dimensional second order)
 
-#+reveal: split
-+ constant mobility \( M(\phi) \equiv 1 \)
-+ polynomial potential \( W(\phi) = \frac{1}{4} \phi^2(1-\phi^2) \)
-+ 0 Neumann boundary conditions
-#+name: eq:boundary-conditions
-\begin{equation}
-\begin{aligned}
-\nabla\mu \cdot \mathbf{n} &= 0 & \text{on} \, \partial\Omega &\times (0,T),\\
-\partial_n\phi &= 0 & \text{on} \, \partial\Omega &\times (0,T),
-\end{aligned}
-\end{equation}
 ** Properties
 :PROPERTIES:
 :html_headline_class: unis-subsection-title
 :END:
+#+attr_reveal: :frag (appear)
 + Mass conservative
 + Total energy decreases
 + expensive
@@ -87,17 +83,46 @@
 :END:
 
 #+REVEAL: split
+#+attr_reveal: :frag (appear)
 + Implicit in time
 + discretized on NxN grid
 + uses multi-grid scheme
+** Discrete Method:
+:PROPERTIES:
+:reveal_extra_attr: data-auto-animate
+:END:
+#+ATTR_REVEAL: :data-id eq
+\begin{equation}
+\begin{aligned}
+\partial_{t}\phi(x,t) &=  \nabla \cdot(M(\phi)\nabla\mu), \\
+\mu &= - \varepsilon^2 \Delta\phi  + W'(\phi),
+\end{aligned}
+\end{equation}
++ semi implicit in time
++ centered difference in space [cite:@SHIN20117441] .
+** Discrete Method:
+:PROPERTIES:
+:reveal_extra_attr: data-auto-animate
+:END:
+#+ATTR_REVEAL: :data-id eq
+#+name: eq:discrete-cahn-hilliard
+\begin{equation}
+\begin{aligned}
+\frac{\color{RoyalBlue}{\phi_{ij}^{n+1}} - \color{Maroon}{\phi_{ij}^n}}{\Delta t}  &=  \color{RoyalBlue}{\nabla _d \cdot (G_{ij} \nabla_d \mu_{ij}^{n+\frac{1}{2}} )}  \,, \\
+ \color{RoyalBlue}{\mu_{ij}^{n+\frac{1}{2}}} &= \color{RoyalBlue}{2\phi_{ij}^{n+1}} - \varepsilon^2  \color{RoyalBlue}{\nabla_d \cdot  (G_{ij} \nabla _d \phi_{ij}^{n+1} )} + \color{Maroon}{W'(\phi_{ij}^n) - 2\phi _{ij}^n} \,,
+\end{aligned}
+\end{equation}
++ semi implicit in time
++ centered difference in space [cite:@SHIN20117441] .
 ** Variables
 #+Reveal_html: <div style="display: flex;justify-content: center;">
-| \( b \)   | collects all terms not dependant on \( \phi_{ij}^{n+1} \) |
+| \( b \)   | \( b = DL \cdot \left( \phi_{ij}^{n+1} , \mu_{ij}^{n+\frac{1}{2}} \right)^T - L \left(  \phi_{ij}^{n+1} , \mu_{ij}^{n+\frac{1}{2}}  \right) \) |
 | \( DL \)  | Jacobian of \( L \)                                    |
-| \( L \)   | Implicit terms of the discrete CH equation |
+| \( \color{RoyalBlue}{L} \) | Implicit terms of the discrete CH equation |
+| \( \color{Maroon}{\left( \zeta_{ij}^n , \psi_{ij}^{n} \right)} \) | Implicit terms of the discrete CH equation |
 | \( \Omega_d \) | discrete version of the computational domain \( \Omega \)   |
 #+Reveal_html: </div>
-#+REVEAL: split
+
 + solves equation of type
 \begin{equation}
 DL \cdot
@@ -109,8 +134,20 @@ DL \cdot
 \end{equation}
 + with Gauss Seidel iteration
 + for every point \( (i,j) \in \Omega_d \)
-+ on two grid scales
++ using a  two grid method
 + multiple times per sub-iteration
++ multiple sub-iterations per time-step
+#+attr_reveal: :frag (appear)
++ constant mobility \( M(\phi) \equiv 1 \)
++ polynomial potential \( W(\phi) = \frac{1}{4} \phi^2(1-\phi^2) \)
++ no flow Neumann boundary conditions
+#+name: eq:boundary-conditions
+\begin{equation}
+\begin{aligned}
+\nabla\mu \cdot \mathbf{n} &= 0 & \text{on} \, \partial\Omega &\times (0,T),\\
+\partial_n\phi &= 0 & \text{on} \, \partial\Omega &\times (0,T),
+\end{aligned}
+\end{equation}
 * Relaxation
 :PROPERTIES:
 :html_headline_class: unis-section-title
@@ -123,13 +160,29 @@ DL \cdot
 #+Reveal_html: </div>
 ** Relaxed Cahn Hilliard equation
 :PROPERTIES:
+:reveal_extra_attr: data-auto-animate
 :html_headline_class: unis-subsection-title
 :END:
 #+name: eq:relaxed-cahn-hilliard
 \begin{equation}
 \begin{aligned}
-\partial_t \phi^\alpha  &= \Delta \mu \,,\\
-\mu &= \varepsilon ^2 \alpha(c^\alpha - \phi^\alpha) + W'(\phi) .
+\partial_{t}\phi^{\alpha}(x,t) &=  \Delta\mu, \\
+\mu &= - \varepsilon^2 \Delta\phi^{\alpha}  + W'(\phi^{\alpha}),
+\end{aligned}
+\end{equation}
++ simpler PDE
++ second order
+
+** Relaxed Cahn Hilliard equation
+:PROPERTIES:
+:reveal_extra_attr: data-auto-animate
+:html_headline_class: unis-subsection-title
+:END:
+#+name: eq:relaxed-cahn-hilliard
+\begin{equation}
+\begin{aligned}
+\partial_t \phi^\alpha(x,t)  &= \Delta \mu \,,\\
+\mu &= \varepsilon ^2 \alpha(c^\alpha - \phi^\alpha) + W'(\phi^{\alpha}) .
 \end{aligned}
 \end{equation}
 + simpler PDE
@@ -140,6 +193,7 @@ DL \cdot
 \begin{align}
 - \Delta c^\alpha  + \alpha c^a &= \alpha \phi ^\alpha,
 \end{align}
+#+attr_reveal: :frag (appear)
 + requires solving an additional equation for \( c \)
 + two dependant equations
 + two one dimensional second order equations
@@ -194,3 +248,73 @@ DL \cdot
 [[file:images/iteration.gif]]
 
 * Conclusion
+:PROPERTIES:
+:html_headline_class: unis-section-title
+:reveal_extra_attr: class="unis-blue-background"
+:END:
+* Discretization
+:PROPERTIES:
+:html_headline_class: unis-section-title
+:reveal_extra_attr: class="unis-blue-background"
+:END:
+** Domain
+\begin{equation}
+\Omega_d = \left\{ i,j \mid i,j \in \mathbb{N} \,, i,j \in [2,N+1] \right\}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+\phi_{ij}^n: \Omega_d \times \left\{ 0, \dots  \right\} &\to \mathbb{R}\\
+\mu_{ij}^n: \Omega_d \times \left\{ 0, \dots \right\} &\to \mathbb{R}
+\end{aligned}
+\end{equation}
+\begin{align*}
+G_{ij} &=
+\begin{cases}
+1, & i,j \in [2,N+1]  \\
+0, & \text{else}
+\end{cases}
+\end{align*}
+** Finite Differences
+\begin{align}
+D_x\phi^{n+1,m}_{i+\frac{1}{2} j} &= \frac{\phi^{n+1,m}_{i+1j} - \phi^{n+1,m}_{ij}}{h} & D_y\phi^{n+1,m}_{ij+\frac{1}{2}} &= \frac{\phi^{n+1,m}_{ij+1} - \phi^{n+1,m}_{ij}}{h}
+\end{align}
+We define \( D_x\mu_{ij}^{n+\frac{1}{2},m} , D_y\mu_{ij}^{n+\frac{1}{2},m} \) in the same way.
+** Discrete CH equation
+:PROPERTIES:
+:reveal_extra_attr: data-auto-animate
+:END:
+#+name: eq:discrete-cahn-hilliard
+\begin{equation}
+\begin{aligned}
+\frac{\phi_{ij}^{n+1} - \phi_{ij}^n}{\Delta t}  &=  \nabla _d \cdot (G_{ij} \nabla_d \mu_{ij}^{n+\frac{1}{2}} )  \,, \\
+ \mu_{ij}^{n+\frac{1}{2}} &= 2\phi_{ij}^{n+1} - \varepsilon^2  \nabla_d \cdot  (G_{ij} \nabla _d \phi_{ij}^{n+1} ) + W'(\phi_{ij}^n) - 2\phi _{ij}^n \,,
+\end{aligned}
+\end{equation}
+** Discrete CH equation
+:PROPERTIES:
+:reveal_extra_attr: data-auto-animate
+:END:
+#+name: eq:discrete-relaxed-cahn-hilliard
+\begin{equation}
+\begin{aligned}
+\frac{\phi_{ij}^{n+1,\alpha} - \phi_{ij}^{n,\alpha}}{\Delta t}  &=  \nabla _d \cdot (G_{ij} \nabla_d \mu_{ij}^{n+\frac{1}{2},\alpha} )  \,,\\
+ \mu_{ij}^{n+\frac{1}{2},\alpha} &= 2\phi_{ij}^{n+1,\alpha} - \varepsilon^2 a(c_{ij}^{n+1,\alpha} - \phi_{ij}^{n+1,\alpha})  + W'(\phi_{ij}^{n,\alpha}) - 2\phi _{ij}^{n,\alpha} \,.
+\end{aligned}
+\end{equation}
+** b
+\begin{align*}
+\begin{pmatrix}
+\zeta^n_{ij}
+ \\
+\psi^n_{ij}
+\end{pmatrix}
+&=
+\begin{pmatrix}
+\frac{\phi_{ij}^{n}}{\Delta t}\\
+W'(\phi_{ij}^n) - 2\phi_{ij}^n
+\end{pmatrix}
+.
+\end{align*}
+
+
+#+PRINT_BIBLIOGRAPHY:
