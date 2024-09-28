@@ -1,6 +1,6 @@
 #+title: Numerical methods
 #+subtitle: on the Cahn-Hilliard Equation
-#+BIBLIOGRAPHY: ~/org/resources/bibliography/refs.bib
+# #+BIBLIOGRAPHY: ~/org/resources/bibliography/refs.bib
 #+OPTIONS: timestamp:nil toc:nil num:nil
 #+PROPERTY: header-args:julia :output-dir images :eval never :noweb no-export
 #+PROPERTY: header-args:julia-vterm :output-dir images :exports results :noweb no-export :eval yes :session jl :cache yes
@@ -53,20 +53,24 @@
 :PROPERTIES:
 :reveal_extra_attr: data-auto-animate
 :END:
+The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{x} , t): \Omega \times (0,T) \to \mathbb{R} \) such that they satisfy
 #+ATTR_REVEAL: :data-id eq
-#+name: eq:CH
+#+name: eq:initial-value-problem
 \begin{equation}
 \begin{aligned}
-\partial_{t}\phi(x,t) &=  \nabla \cdot(M(\phi)\nabla\mu), \\
-\mu &= - \varepsilon^2 \Delta\phi  + W'(\phi),
+\partial_{t}\phi(x,t) &=  \nabla \cdot(M(\phi)\nabla\mu),\\
+\mu &= - \varepsilon^2 \Delta\phi  + W'(\phi), & \text{in} \, \Omega &\times (0,T),\\
+-\nabla\mu \cdot \mathbf{n} &= 0\\
+\nabla\phi \cdot \mathbf{n} &= 0 & \text{on} \, \partial\Omega &\times (0,T), \\
+\phi(x,0) &= \phi^0(x) \,, & \text{in} \, \Omega &
 \end{aligned}
 \end{equation}
 
 #+attr_reveal: :frag (appear)
-+ phase field equation for two phase flow
-+ diffuse interface equation
-+ gives position of phases
-+ 4th order (2 dimensional second order)
++ constant mobility \( M(\phi) \equiv 1 \)
++ polynomial potential \( W(\phi) = \frac{1}{4} \phi^2(1-\phi^2) \)
++ no flow Neumann boundary conditions
+#+name: eq:boundary-conditions
 
 ** Properties
 :PROPERTIES:
@@ -75,7 +79,11 @@
 #+attr_reveal: :frag (appear)
 + Mass conservative
 + Total energy decreases
-+ expensive
++ phase field equation for two phase flow
+  + diffuse interface equation
+  + gives position of phases
++ 4th order (2 dimensional second order)
+  + expensive
 * Baseline solver
 :PROPERTIES:
 :html_headline_class: unis-section-title
@@ -119,10 +127,11 @@
 | \( b \)   | \( b = DL \cdot \left( \phi_{ij}^{n+1} , \mu_{ij}^{n+\frac{1}{2}} \right)^T - L \left(  \phi_{ij}^{n+1} , \mu_{ij}^{n+\frac{1}{2}}  \right) \) |
 | \( DL \)  | Jacobian of \( L \)                                    |
 | \( \color{RoyalBlue}{L} \) | Implicit terms of the discrete CH equation |
-| \( \color{Maroon}{\left( \zeta_{ij}^n , \psi_{ij}^{n} \right)} \) | Implicit terms of the discrete CH equation |
+| \( \color{Maroon}{\left( \zeta_{ij}^n , \psi_{ij}^{n} \right)} \) | Explicit terms of the discrete CH equation |
 | \( \Omega_d \) | discrete version of the computational domain \( \Omega \)   |
 #+Reveal_html: </div>
 
+** solver
 + solves equation of type
 \begin{equation}
 DL \cdot
@@ -137,17 +146,6 @@ DL \cdot
 + using a  two grid method
 + multiple times per sub-iteration
 + multiple sub-iterations per time-step
-#+attr_reveal: :frag (appear)
-+ constant mobility \( M(\phi) \equiv 1 \)
-+ polynomial potential \( W(\phi) = \frac{1}{4} \phi^2(1-\phi^2) \)
-+ no flow Neumann boundary conditions
-#+name: eq:boundary-conditions
-\begin{equation}
-\begin{aligned}
-\nabla\mu \cdot \mathbf{n} &= 0 & \text{on} \, \partial\Omega &\times (0,T),\\
-\partial_n\phi &= 0 & \text{on} \, \partial\Omega &\times (0,T),
-\end{aligned}
-\end{equation}
 * Relaxation
 :PROPERTIES:
 :html_headline_class: unis-section-title
@@ -202,6 +200,18 @@ DL \cdot
 + implicit in \( c \)
 + solves both equations in tandem
 + resolving \( c \) during each sub-iteration required
+** Exlicit and implicit solution of c
+#+REVEAL_HTML: <div style="display: grid; grid-template-columns: auto auto; padding: 5rem; justify-content: center">
+#+caption: exlicit solution of c
+#+name: fig:relaxed-smooth-eval
+[[file:images/explicit-elips-smooth.svg]]
+#+caption: implicit solution of c by alternating solving \phhi and c
+#+name: fig:alternating-elips-smooth
+[[file:images/alternating-elips-smooth.svg]]
+** choice of \alpha
+#+name: fig:alpha-error
+[[file:images/alpha-error.svg]]
+
 * Numerical Experiments
 :PROPERTIES:
 :html_headline_class: unis-section-title
@@ -252,6 +262,8 @@ DL \cdot
 :html_headline_class: unis-section-title
 :reveal_extra_attr: class="unis-blue-background"
 :END:
+#+Reveal: split
+
 * Discretization
 :PROPERTIES:
 :html_headline_class: unis-section-title
@@ -317,4 +329,4 @@ W'(\phi_{ij}^n) - 2\phi_{ij}^n
 \end{align*}
 
 
-#+PRINT_BIBLIOGRAPHY:
+# #+PRINT_BIBLIOGRAPHY:
