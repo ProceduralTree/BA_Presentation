@@ -219,6 +219,24 @@ DL \cdot
 :END:
 ** Energy
 #+REVEAL_HTML: <div style="display: grid; grid-template-columns: auto auto; padding: 5rem;">
+#+REVEAL_HTML: <div>
++ The CH equation is related to the following energy functional
+#+name: eq:energy
+\begin{align}
+E^{\text{bulk}}[\phi] &= \int_{\Omega} \frac{\varepsilon^2}{2} |\nabla \phi |^2 + W(\phi) \, dx ,
+\end{align}
++ The relaxed CH has the following related energy functional
+#+name: eq:relaxed-energy
+\begin{equation}
+E_{rel}(\phi^{\alpha} , c^\alpha) :=
+\int_{\Omega}  \frac{1}{2}\varepsilon^2 \alpha (c^\alpha - \phi^{\alpha})^2 + W(x) \ d \operatorname{\mathbf{x}}
+\end{equation}
++ Total energy decreases for the CH equation and the relaxed CH equation
+\begin{align*}
+\frac{d}{dt}E[\phi(t)]  &\stackrel{\partial_n\phi = 0}{=} - \int_{ \Omega } |\nabla \mu|^2 \ d \mathbf{x}, & \forall t \in (0,T)
+\end{align*}
++ Relaxed CH equation should decrease both energy functionals
+#+REVEAL_HTML: </div>
 
 #+caption: Discrete Energy decrease in both solvers
 #+name: fig:relaxed-energy-balance
@@ -237,25 +255,10 @@ DL \cdot
 #+caption: Behaviour of both solvers when varying time-step size
 #+name: fig:relaxed-stability-in-time
 [[file:images/relaxed-time-stability.svg]]
-* Comparison
-:PROPERTIES:
-:html_headline_class: unis-section-title
-:reveal_extra_attr: class="unis-blue-background"
-:END:
-
-#+REVEAL: split
+** Direct comparison of the baseline solver with the relaxed solver
 
 [[file:images/relaxed-comparison.gif]]
 
-#+REVEAL: split
-
-#+REVEAL_HTML: <div style="display: grid; grid-template-columns: auto auto; padding: 5rem;">
-
-#+name: fig:relaxed-anim
-[[file:images/relaxed-anim.gif]]
-
-#+name: fig:solver-iteration
-[[file:images/iteration.gif]]
 
 * Conclusion
 :PROPERTIES:
