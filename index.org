@@ -1,5 +1,5 @@
-#+title: Numerical methods
-#+subtitle: on the Cahn-Hilliard Equation
+#+subtitle: A numerical method on the Cahn-Hilliard equation
+#+subtitle: and its relaxed variation
 #+BIBLIOGRAPHY: ~/org/resources/bibliography/refs.bib
 #+OPTIONS: timestamp:nil toc:nil num:nil
 #+PROPERTY: header-args:julia :output-dir images :eval never :noweb no-export
