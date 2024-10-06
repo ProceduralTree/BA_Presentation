@@ -1,0 +1,199 @@
+%& /home/jon/.config/emacs/.local/cache/org/persist/20/054288-3473-4ffe-8933-01a9c5fe54d0-59a0bd2da087ae89cfcca34af1a70371
+% Intended LaTeX compiler: pdflatex
+\documentclass[presentation]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsmath}
+
+%% ox-latex features:
+%   !announce-start, !guess-pollyglossia, !guess-babel, !guess-inputenc, maths,
+%   image, svg, !announce-end.
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\usepackage{graphicx}
+
+\usepackage[inkscapelatex=false]{svg}
+
+%% end ox-latex features
+
+
+% end precompiled preamble
+\ifcsname endofdump\endcsname\endofdump\fi
+
+\usetheme{default}
+\author{Jonathan Ulmer}
+\date{\today}
+\title{Numerical methods}
+\subtitle{on the Cahn-Hilliard Equation}
+\hypersetup{
+ pdfauthor={Jonathan Ulmer},
+ pdftitle={Numerical methods},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 29.3 (Org mode 9.7-pre)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\begin{frame}[label={sec:orgd620e75}]{Table of Contents}
+\end{frame}
+\begin{frame}[label={sec:org1caa142}]{Introduction}
+\end{frame}
+
+\begin{frame}[label={sec:orga77819f}]{The Cahn-Hilliard equation}
+\begin{center}
+\begin{tabular}{ll}
+\(M(\phi): [-1,1] \to \mathbb{R}^+\) & Mobility coefficient\\
+\(W(\phi): [-1,1] \to \mathbb{R}^+\) & Double well potential\\
+\(\varepsilon > 0 \in \mathbb{R}\) & Interface coefficient\\
+\(\phi : \Omega \times (0,T) \to \mathbb{R}^d\) & Phase-field \alert{variable}\\
+\(\mu : \Omega \times (0,T) \to \mathbb{R}^d\) & Chemical potential \alert{variable}\\
+\end{tabular}
+\end{center}
+\begin{block}{Cahn-Hilliard Equation:}
+\begin{equation}
+\label{eq:CH}
+\begin{aligned}
+\partial_{t}\phi(x,t) &=  \nabla \cdot(M(\phi)\nabla\mu), \\
+\mu &= - \varepsilon^2 \Delta\phi  + W'(\phi),
+\end{aligned}
+\end{equation}
+\begin{itemize}
+\item phase field equation for two phase flow
+\item diffuse interface equation
+\item gives position of phases
+\end{itemize}
+
+\begin{itemize}
+\item constant mobility \(M(\phi) \equiv 1\)
+\item polynomial potential \(W(\phi) = \frac{1}{4} \phi^2(1-\phi^2)\)
+\item 0 Neumann boundary conditions
+\end{itemize}
+\begin{equation}
+\label{eq:boundary-conditions}
+\begin{aligned}
+\nabla\mu \cdot \mathbf{n} &= 0 & \text{on} \, \partial\Omega &\times (0,T),\\
+\partial_n\phi &= 0 & \text{on} \, \partial\Omega &\times (0,T),
+\end{aligned}
+\end{equation}
+\end{block}
+\begin{block}{Properties}
+\begin{itemize}
+\item Mass conservative
+\item Total energy decreases
+\item expensive
+\end{itemize}
+\end{block}
+\end{frame}
+\begin{frame}[label={sec:orgb21f9df}]{Baseline solver}
+\begin{itemize}
+\item Implicit in time
+\item discretized on NxN grid
+\item uses multi-grid scheme
+\end{itemize}
+\begin{center}
+\begin{tabular}{ll}
+\(b\) & collects all terms not dependant on \(\phi_{ij}^{n+1}\)\\
+\(DL\) & Jacobian of \(L\)\\
+\(L\) & Implicit terms of the discrete CH equation\\
+\(\Omega_d\) & discrete version of the computational domain \(\Omega\)\\
+\end{tabular}
+\end{center}
+\begin{itemize}
+\item solves equation of type
+\end{itemize}
+\begin{equation}
+DL \cdot
+\begin{pmatrix}
+\phi^{n+1}_{ij} \\
+\mu^{n+\frac{1}{2}}_{ij}
+\end{pmatrix}
+= b
+\end{equation}
+\begin{itemize}
+\item with Gauss Seidel iteration
+\item for every point \((i,j) \in \Omega_d\)
+\item on two grid scales
+\item multiple times per sub-iteration
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:orgc31f08d}]{Relaxation}
+\begin{block}{Relaxed Cahn Hilliard equation}
+\begin{equation}
+\label{eq:relaxed-cahn-hilliard}
+\begin{aligned}
+\partial_t \phi^\alpha  &= \Delta \mu \,,\\
+\mu &= \varepsilon ^2 \alpha(c^\alpha - \phi^\alpha) + W'(\phi) .
+\end{aligned}
+\end{equation}
+where  \(\alpha < 0\)  is a relaxation parameter
+\end{block}
+\begin{block}{Additional elliptical system}
+\begin{align}
+\label{eq:elliptical-equation}
+- \Delta c^\alpha  + \alpha c^a &= \alpha \phi ^\alpha,
+\end{align}
+\begin{itemize}
+\item requires solving an additional equation for \(c\)
+\item two dependant equations
+\item two one dimensional second order equations
+\item solved similar to the baseline equation
+\end{itemize}
+\end{block}
+\begin{block}{Implementation}
+\begin{itemize}
+\item implicit in \(c\)
+\item solves both equations in tandem
+\item resolving \(c\) during each sub-iteration required
+\end{itemize}
+\end{block}
+\end{frame}
+\begin{frame}[label={sec:org596cfe3}]{Numerical Experiments}
+\begin{block}{Energy}
+\begin{center}
+\includesvg[width=.9\linewidth]{images/energy_balance}
+\label{fig:energy-balance}
+\end{center}
+
+\begin{center}
+\includesvg[width=.9\linewidth]{images/relaxed-energy-balance}
+\label{fig:relaxed-energy-balance}
+\end{center}
+\end{block}
+\begin{block}{mass conservation}
+\begin{center}
+\includesvg[width=.9\linewidth]{images/relaxed-mass-balance}
+\label{fig:relaxed-mass-balance}
+\end{center}
+\end{block}
+\begin{block}{Sub iteration}
+\begin{center}
+\includesvg[width=.9\linewidth]{images/relaxed-convergence}
+\label{fig:relaxed-convergence}
+\end{center}
+\end{block}
+\begin{block}{time}
+\begin{center}
+\includesvg[width=.9\linewidth]{images/relaxed-time-stability}
+\label{fig:relaxed-stability-in-time}
+\end{center}
+\end{block}
+\end{frame}
+\begin{frame}[label={sec:org9283679}]{Comparison}
+\url{images/relaxed-comparison.gif}
+
+\url{images/relaxed-anim.gif}
+
+\url{images/iteration.gif}
+\end{frame}
+\begin{frame}[label={sec:org845d90f}]{Conclusion}
+\end{frame}
+\end{document}
