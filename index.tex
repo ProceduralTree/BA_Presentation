@@ -1,6 +1,6 @@
-%& /home/jon/.config/emacs/.local/cache/org/persist/20/054288-3473-4ffe-8933-01a9c5fe54d0-59a0bd2da087ae89cfcca34af1a70371
+%& /home/jon/.config/emacs/.local/cache/org/persist/62/6a3bf8-22bf-43a5-a8dc-a4fb528c0299-cc1ee15f43b9835e6540b5eebedd3f2c
 % Intended LaTeX compiler: pdflatex
-\documentclass[presentation]{beamer}
+\documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{hyperref}
@@ -12,8 +12,10 @@
 \usepackage{amsmath}
 
 %% ox-latex features:
-%   !announce-start, !guess-pollyglossia, !guess-babel, !guess-inputenc, maths,
-%   image, svg, !announce-end.
+%   !announce-start, !guess-pollyglossia, !guess-babel, !guess-inputenc, caption,
+%   maths, image, svg, !announce-end.
+
+\usepackage{capt-of}
 
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -28,11 +30,10 @@
 % end precompiled preamble
 \ifcsname endofdump\endcsname\endofdump\fi
 
-\usetheme{default}
 \author{Jonathan Ulmer}
 \date{\today}
-\title{Numerical methods}
-\subtitle{on the Cahn-Hilliard Equation}
+\title{Numerical methods\\\medskip
+\large on the Cahn-Hilliard Equation}
 \hypersetup{
  pdfauthor={Jonathan Ulmer},
  pdftitle={Numerical methods},
@@ -43,70 +44,110 @@
 \begin{document}
 
 \maketitle
-\begin{frame}[label={sec:orgd620e75}]{Table of Contents}
-\end{frame}
-\begin{frame}[label={sec:org1caa142}]{Introduction}
-\end{frame}
-
-\begin{frame}[label={sec:orga77819f}]{The Cahn-Hilliard equation}
+\section*{Table of Contents}
+\label{sec:org8a33c53}
+\section*{The Cahn-Hilliard equation}
+\label{sec:org0cb516e}
+\subsection*{Variables}
+\label{sec:org4f9ea90}
 \begin{center}
 \begin{tabular}{ll}
 \(M(\phi): [-1,1] \to \mathbb{R}^+\) & Mobility coefficient\\
 \(W(\phi): [-1,1] \to \mathbb{R}^+\) & Double well potential\\
 \(\varepsilon > 0 \in \mathbb{R}\) & Interface coefficient\\
-\(\phi : \Omega \times (0,T) \to \mathbb{R}^d\) & Phase-field \alert{variable}\\
-\(\mu : \Omega \times (0,T) \to \mathbb{R}^d\) & Chemical potential \alert{variable}\\
+\(\phi : \Omega \times (0,T) \to \mathbb{R}^d\) & Phase-field \textbf{variable}\\
+\(\mu : \Omega \times (0,T) \to \mathbb{R}^d\) & Chemical potential \textbf{variable}\\
 \end{tabular}
 \end{center}
-\begin{block}{Cahn-Hilliard Equation:}
+\begin{figure}[htbp]
+\centering
+\includesvg[width=.9\linewidth]{images/domain}
+\caption{\label{fig:domain}Computational Domain \(\Omega\)}
+\end{figure}
+\begin{figure}[htbp]
+\centering
+\includesvg[width=.9\linewidth]{images/double-well}
+\caption{\label{fig:double-well}Double well potential \(W(\phi)\)}
+\end{figure}
+\subsection*{Cahn-Hilliard Equation:}
+\label{sec:org1046473}
+The aim of the CH equation is to find solutions \(\phi(\vec{x} , t) , \mu(\vec{x} , t): \Omega \times (0,T) \to \mathbb{R}\) such that they satisfy
 \begin{equation}
-\label{eq:CH}
+\label{eq:initial-value-problem}
+\begin{aligned}
+\partial_{t}\phi(x,t) &=  \nabla \cdot(M(\phi)\nabla\mu),\\
+\mu &= - \varepsilon^2 \Delta\phi  + W'(\phi), & \text{in} \, \Omega &\times (0,T),\\
+-\nabla\mu \cdot \mathbf{n} &= 0\\
+\nabla\phi \cdot \mathbf{n} &= 0 & \text{on} \, \partial\Omega &\times (0,T), \\
+\phi(x,0) &= \phi^0(x) \,, & \text{in} \, \Omega &
+\end{aligned}
+\end{equation}
+
+\begin{itemize}
+\item constant mobility \(M(\phi) \equiv 1\)
+\item polynomial potential \(W(\phi) = \frac{1}{4} \phi^2(1-\phi^2)\)
+\item no flow Neumann boundary conditions
+\end{itemize}
+\subsection*{Properties}
+\label{sec:org5836bbb}
+\begin{itemize}
+\item Mass conservative
+\item Total energy decreases
+\item phase field equation for two phase flow
+\begin{itemize}
+\item diffuse interface equation
+\item gives position of phases
+\end{itemize}
+\item 4th order (2 dimensional second order)
+\begin{itemize}
+\item expensive
+\end{itemize}
+\end{itemize}
+\section*{Baseline solver}
+\label{sec:org1ce16b2}
+\begin{itemize}
+\item Implicit in time
+\item discretized on NxN grid
+\item uses multi-grid scheme
+\end{itemize}
+\subsection*{Discrete Method:}
+\label{sec:org3019139}
+\begin{equation}
 \begin{aligned}
 \partial_{t}\phi(x,t) &=  \nabla \cdot(M(\phi)\nabla\mu), \\
 \mu &= - \varepsilon^2 \Delta\phi  + W'(\phi),
 \end{aligned}
 \end{equation}
 \begin{itemize}
-\item phase field equation for two phase flow
-\item diffuse interface equation
-\item gives position of phases
+\item semi implicit in time
+\item centered difference in space \autocite{SHIN20117441} .
 \end{itemize}
-
-\begin{itemize}
-\item constant mobility \(M(\phi) \equiv 1\)
-\item polynomial potential \(W(\phi) = \frac{1}{4} \phi^2(1-\phi^2)\)
-\item 0 Neumann boundary conditions
-\end{itemize}
+\subsection*{Discrete Method:}
+\label{sec:org5f43651}
 \begin{equation}
-\label{eq:boundary-conditions}
+\label{eq:discrete-cahn-hilliard}
 \begin{aligned}
-\nabla\mu \cdot \mathbf{n} &= 0 & \text{on} \, \partial\Omega &\times (0,T),\\
-\partial_n\phi &= 0 & \text{on} \, \partial\Omega &\times (0,T),
+\frac{\color{RoyalBlue}{\phi_{ij}^{n+1}} - \color{Maroon}{\phi_{ij}^n}}{\Delta t}  &=  \color{RoyalBlue}{\nabla _d \cdot (G_{ij} \nabla_d \mu_{ij}^{n+\frac{1}{2}} )}  \,, \\
+ \color{RoyalBlue}{\mu_{ij}^{n+\frac{1}{2}}} &= \color{RoyalBlue}{2\phi_{ij}^{n+1}} - \varepsilon^2  \color{RoyalBlue}{\nabla_d \cdot  (G_{ij} \nabla _d \phi_{ij}^{n+1} )} + \color{Maroon}{W'(\phi_{ij}^n) - 2\phi _{ij}^n} \,,
 \end{aligned}
 \end{equation}
-\end{block}
-\begin{block}{Properties}
 \begin{itemize}
-\item Mass conservative
-\item Total energy decreases
-\item expensive
+\item semi implicit in time
+\item centered difference in space \autocite{SHIN20117441} .
 \end{itemize}
-\end{block}
-\end{frame}
-\begin{frame}[label={sec:orgb21f9df}]{Baseline solver}
-\begin{itemize}
-\item Implicit in time
-\item discretized on NxN grid
-\item uses multi-grid scheme
-\end{itemize}
+\subsection*{Variables}
+\label{sec:orgaddb669}
 \begin{center}
 \begin{tabular}{ll}
-\(b\) & collects all terms not dependant on \(\phi_{ij}^{n+1}\)\\
+\(b\) & \(b = DL \cdot \left( \phi_{ij}^{n+1} , \mu_{ij}^{n+\frac{1}{2}} \right)^T - L \left(  \phi_{ij}^{n+1} , \mu_{ij}^{n+\frac{1}{2}}  \right)\)\\
 \(DL\) & Jacobian of \(L\)\\
-\(L\) & Implicit terms of the discrete CH equation\\
+\(\color{RoyalBlue}{L}\) & Implicit terms of the discrete CH equation\\
+\(\color{Maroon}{\left( \zeta_{ij}^n , \psi_{ij}^{n} \right)}\) & Explicit terms of the discrete CH equation\\
 \(\Omega_d\) & discrete version of the computational domain \(\Omega\)\\
 \end{tabular}
 \end{center}
+\subsection*{solver}
+\label{sec:orgb4c20cd}
 \begin{itemize}
 \item solves equation of type
 \end{itemize}
@@ -121,22 +162,48 @@ DL \cdot
 \begin{itemize}
 \item with Gauss Seidel iteration
 \item for every point \((i,j) \in \Omega_d\)
-\item on two grid scales
+\item using a  two grid method
 \item multiple times per sub-iteration
+\item multiple sub-iterations per time-step
 \end{itemize}
-\end{frame}
-\begin{frame}[label={sec:orgc31f08d}]{Relaxation}
-\begin{block}{Relaxed Cahn Hilliard equation}
+\section*{Relaxation}
+\label{sec:org1f6ab6d}
+\subsection*{Variables}
+\label{sec:org20d239b}
+\begin{center}
+\begin{tabular}{ll}
+\(\alpha > 0\) & relaxation parameter\\
+\(c^{\alpha}:\Omega \times (0,T) \to \mathbb{R}^d\) & solution of an elliptical system\\
+\end{tabular}
+\end{center}
+\subsection*{Relaxed Cahn Hilliard equation}
+\label{sec:orgf65c34e}
 \begin{equation}
 \label{eq:relaxed-cahn-hilliard}
 \begin{aligned}
-\partial_t \phi^\alpha  &= \Delta \mu \,,\\
-\mu &= \varepsilon ^2 \alpha(c^\alpha - \phi^\alpha) + W'(\phi) .
+\partial_{t}\phi^{\alpha}(x,t) &=  \Delta\mu, \\
+\mu &= - \varepsilon^2 \Delta\phi^{\alpha}  + W'(\phi^{\alpha}),
 \end{aligned}
 \end{equation}
-where  \(\alpha < 0\)  is a relaxation parameter
-\end{block}
-\begin{block}{Additional elliptical system}
+\begin{itemize}
+\item simpler PDE
+\item second order
+\end{itemize}
+\subsection*{Relaxed Cahn Hilliard equation}
+\label{sec:orge441d95}
+\begin{equation}
+\label{eq:relaxed-cahn-hilliard}
+\begin{aligned}
+\partial_t \phi^\alpha(x,t)  &= \Delta \mu \,,\\
+\mu &= \varepsilon ^2 \alpha(c^\alpha - \phi^\alpha) + W'(\phi^{\alpha}) .
+\end{aligned}
+\end{equation}
+\begin{itemize}
+\item simpler PDE
+\item second order
+\end{itemize}
+\subsection*{Additional elliptical system}
+\label{sec:orge10da20}
 \begin{align}
 \label{eq:elliptical-equation}
 - \Delta c^\alpha  + \alpha c^a &= \alpha \phi ^\alpha,
@@ -147,53 +214,147 @@ where  \(\alpha < 0\)  is a relaxation parameter
 \item two one dimensional second order equations
 \item solved similar to the baseline equation
 \end{itemize}
-\end{block}
-\begin{block}{Implementation}
+\subsection*{Implementation}
+\label{sec:orgf602ff2}
 \begin{itemize}
 \item implicit in \(c\)
 \item solves both equations in tandem
 \item resolving \(c\) during each sub-iteration required
 \end{itemize}
-\end{block}
-\end{frame}
-\begin{frame}[label={sec:org596cfe3}]{Numerical Experiments}
-\begin{block}{Energy}
+\subsection*{Exlicit and implicit solution of c}
+\label{sec:org8066d72}
+\begin{figure}[htbp]
+\centering
+\includesvg[width=.9\linewidth]{images/explicit-elips-smooth}
+\caption{\label{fig:relaxed-smooth-eval}exlicit solution of c}
+\end{figure}
+\begin{figure}[htbp]
+\centering
+\includesvg[width=.9\linewidth]{images/alternating-elips-smooth}
+\caption{\label{fig:alternating-elips-smooth}implicit solution of c by alternating solving \phhi and c}
+\end{figure}
+\subsection*{choice of \(\alpha\)}
+\label{sec:orgeb497bd}
 \begin{center}
-\includesvg[width=.9\linewidth]{images/energy_balance}
-\label{fig:energy-balance}
+\includesvg[width=.9\linewidth]{images/alpha-error}
+\label{fig:alpha-error}
 \end{center}
-
-\begin{center}
+\section*{Numerical Experiments}
+\label{sec:orga13f457}
+\subsection*{Energy}
+\label{sec:orgdcdbae9}
+\begin{itemize}
+\item The CH equation is related to the following energy functional
+\[E^{\text{bulk}}[\phi] = \int_{\Omega} \frac{\varepsilon^2}{2} |\nabla \phi |^2 + W(\phi) \, dx  \]
+\item The relaxed CH has the following related energy functional
+\[E_{rel}(\phi^{\alpha} , c^\alpha) := \int_{\Omega}  \frac{1}{2}\varepsilon^2 \alpha (c^\alpha - \phi^{\alpha})^2 + W(x) \ d \operatorname{\mathbf{x}} \]
+\item Total energy decreases for the CH equation and the relaxed CH equation
+\[\frac{d}{dt}E[\phi(t)]  \stackrel{\partial_n\phi = 0}{=} - \int_{ \Omega } |\nabla \mu|^2 \ d \mathbf{x}, \qquad \forall t \in (0,T) \]
+\item Relaxed CH equation should decrease both energy functionals
+\end{itemize}
+\begin{figure}[htbp]
+\centering
 \includesvg[width=.9\linewidth]{images/relaxed-energy-balance}
-\label{fig:relaxed-energy-balance}
-\end{center}
-\end{block}
-\begin{block}{mass conservation}
-\begin{center}
+\caption{\label{fig:relaxed-energy-balance}Discrete Energy decrease in both solvers}
+\end{figure}
+\subsection*{mass conservation}
+\label{sec:org8135f88}
+\begin{equation}
+\frac{d}{d t} \int_{\Omega} \phi ~\mathrm{d} \operatorname{\mathbf{x}} = 0
+\end{equation}
+\begin{itemize}
+\item Discrete versions should satisfy
+\end{itemize}
+\begin{equation}
+\sum_{i,j \in \Omega} \frac{\phi_{ij}^{n} - \phi_{ij}^{n+1}}{\Delta t} = 0
+\end{equation}
+\begin{figure}[htbp]
+\centering
+\includesvg[width=.9\linewidth]{images/mass_balance}
+\caption{\label{fig:mass-balance}energy conservation for both solvers}
+\end{figure}
+\begin{figure}[htbp]
+\centering
 \includesvg[width=.9\linewidth]{images/relaxed-mass-balance}
-\label{fig:relaxed-mass-balance}
-\end{center}
-\end{block}
-\begin{block}{Sub iteration}
-\begin{center}
+\caption{\label{fig:relaxed-mass-balance}relaxed mass behavior}
+\end{figure}
+\subsection*{Sub iteration}
+\label{sec:org4c9f08c}
+\begin{figure}[htbp]
+\centering
 \includesvg[width=.9\linewidth]{images/relaxed-convergence}
-\label{fig:relaxed-convergence}
-\end{center}
-\end{block}
-\begin{block}{time}
-\begin{center}
+\caption{\label{fig:relaxed-convergence}Behaviour of both solvers during sub-iterations}
+\end{figure}
+\subsection*{time}
+\label{sec:orgec8065c}
+\begin{figure}[htbp]
+\centering
 \includesvg[width=.9\linewidth]{images/relaxed-time-stability}
-\label{fig:relaxed-stability-in-time}
-\end{center}
-\end{block}
-\end{frame}
-\begin{frame}[label={sec:org9283679}]{Comparison}
+\caption{\label{fig:relaxed-stability-in-time}Behaviour of both solvers when varying time-step size}
+\end{figure}
+\subsection*{Direct comparison of the baseline solver with the relaxed solver}
+\label{sec:org691f07d}
+
 \url{images/relaxed-comparison.gif}
-
-\url{images/relaxed-anim.gif}
-
-\url{images/iteration.gif}
-\end{frame}
-\begin{frame}[label={sec:org845d90f}]{Conclusion}
-\end{frame}
+\section*{Conclusion}
+\label{sec:org2131dd5}
+\section*{Discretization}
+\label{sec:orgfea45b0}
+\subsection*{Domain}
+\label{sec:org5ab43b0}
+\begin{equation}
+\Omega_d = \left\{ i,j \mid i,j \in \mathbb{N} \,, i,j \in [2,N+1] \right\}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+\phi_{ij}^n: \Omega_d \times \left\{ 0, \dots  \right\} &\to \mathbb{R}\\
+\mu_{ij}^n: \Omega_d \times \left\{ 0, \dots \right\} &\to \mathbb{R}
+\end{aligned}
+\end{equation}
+\begin{align*}
+G_{ij} &=
+\begin{cases}
+1, & i,j \in [2,N+1]  \\
+0, & \text{else}
+\end{cases}
+\end{align*}
+\subsection*{Finite Differences}
+\label{sec:org89a6614}
+\begin{align}
+D_x\phi^{n+1,m}_{i+\frac{1}{2} j} &= \frac{\phi^{n+1,m}_{i+1j} - \phi^{n+1,m}_{ij}}{h} & D_y\phi^{n+1,m}_{ij+\frac{1}{2}} &= \frac{\phi^{n+1,m}_{ij+1} - \phi^{n+1,m}_{ij}}{h}
+\end{align}
+We define \(D_x\mu_{ij}^{n+\frac{1}{2},m} , D_y\mu_{ij}^{n+\frac{1}{2},m}\) in the same way.
+\subsection*{Discrete CH equation}
+\label{sec:orge3cb03d}
+\begin{equation}
+\label{eq:discrete-cahn-hilliard}
+\begin{aligned}
+\frac{\phi_{ij}^{n+1} - \phi_{ij}^n}{\Delta t}  &=  \nabla _d \cdot (G_{ij} \nabla_d \mu_{ij}^{n+\frac{1}{2}} )  \,, \\
+ \mu_{ij}^{n+\frac{1}{2}} &= 2\phi_{ij}^{n+1} - \varepsilon^2  \nabla_d \cdot  (G_{ij} \nabla _d \phi_{ij}^{n+1} ) + W'(\phi_{ij}^n) - 2\phi _{ij}^n \,,
+\end{aligned}
+\end{equation}
+\subsection*{Discrete CH equation}
+\label{sec:org2083b10}
+\begin{equation}
+\label{eq:discrete-relaxed-cahn-hilliard}
+\begin{aligned}
+\frac{\phi_{ij}^{n+1,\alpha} - \phi_{ij}^{n,\alpha}}{\Delta t}  &=  \nabla _d \cdot (G_{ij} \nabla_d \mu_{ij}^{n+\frac{1}{2},\alpha} )  \,,\\
+ \mu_{ij}^{n+\frac{1}{2},\alpha} &= 2\phi_{ij}^{n+1,\alpha} - \varepsilon^2 a(c_{ij}^{n+1,\alpha} - \phi_{ij}^{n+1,\alpha})  + W'(\phi_{ij}^{n,\alpha}) - 2\phi _{ij}^{n,\alpha} \,.
+\end{aligned}
+\end{equation}
+\subsection*{b}
+\label{sec:org8b0c089}
+\begin{align*}
+\begin{pmatrix}
+\zeta^n_{ij}
+ \\
+\psi^n_{ij}
+\end{pmatrix}
+&=
+\begin{pmatrix}
+\frac{\phi_{ij}^{n}}{\Delta t}\\
+W'(\phi_{ij}^n) - 2\phi_{ij}^n
+\end{pmatrix}
+.
+\end{align*}
 \end{document}

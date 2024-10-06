@@ -1,6 +1,6 @@
 #+title: Numerical methods
 #+subtitle: on the Cahn-Hilliard Equation
-# #+BIBLIOGRAPHY: ~/org/resources/bibliography/refs.bib
+#+BIBLIOGRAPHY: ~/org/resources/bibliography/refs.bib
 #+OPTIONS: timestamp:nil toc:nil num:nil
 #+PROPERTY: header-args:julia :output-dir images :eval never :noweb no-export
 #+PROPERTY: header-args:julia-vterm :output-dir images :exports results :noweb no-export :eval yes :session jl :cache yes
@@ -200,15 +200,17 @@ DL \cdot
 + implicit in \( c \)
 + solves both equations in tandem
 + resolving \( c \) during each sub-iteration required
-** Exlicit and implicit solution of c
-#+REVEAL_HTML: <div style="display: grid; grid-template-columns: auto auto; padding: 5rem; justify-content: center">
-#+caption: exlicit solution of c
+** Explicit solution of c
+# #+REVEAL_HTML: <div style="display: grid; grid-template-columns: auto auto; padding: 5rem; justify-content: center">
+#+caption: explicit solution of c
 #+name: fig:relaxed-smooth-eval
 [[file:images/explicit-elips-smooth.svg]]
-#+caption: implicit solution of c by alternating solving \phhi and c
+
+** Implicit solution of c
+#+caption: implicit solution of c by alternating solving \phi and c
 #+name: fig:alternating-elips-smooth
 [[file:images/alternating-elips-smooth.svg]]
-** choice of \alpha
+** choice of \( \alpha \) for fixed \( \varepsilon \)
 #+name: fig:alpha-error
 [[file:images/alpha-error.svg]]
 
@@ -218,33 +220,35 @@ DL \cdot
 :reveal_extra_attr: class="unis-blue-background"
 :END:
 ** Energy
-#+REVEAL_HTML: <div style="display: grid; grid-template-columns: auto auto; padding: 5rem;">
-#+REVEAL_HTML: <div>
+# #+REVEAL_HTML: <div style="display: grid; grid-template-columns: auto auto; padding: 5rem;">
+#+attr_reveal: :frag (appear)
 + The CH equation is related to the following energy functional
-#+name: eq:energy
-\begin{align}
-E^{\text{bulk}}[\phi] &= \int_{\Omega} \frac{\varepsilon^2}{2} |\nabla \phi |^2 + W(\phi) \, dx ,
-\end{align}
+   \[E^{\text{bulk}}[\phi] = \int_{\Omega} \frac{\varepsilon^2}{2} |\nabla \phi |^2 + W(\phi) \, dx  \]
 + The relaxed CH has the following related energy functional
-#+name: eq:relaxed-energy
-\begin{equation}
-E_{rel}(\phi^{\alpha} , c^\alpha) :=
-\int_{\Omega}  \frac{1}{2}\varepsilon^2 \alpha (c^\alpha - \phi^{\alpha})^2 + W(x) \ d \operatorname{\mathbf{x}}
-\end{equation}
+   \[E_{rel}(\phi^{\alpha} , c^\alpha) := \int_{\Omega}  \frac{1}{2}\varepsilon^2 \alpha (c^\alpha - \phi^{\alpha})^2 + W(x) \ d \operatorname{\mathbf{x}} \]
 + Total energy decreases for the CH equation and the relaxed CH equation
-\begin{align*}
-\frac{d}{dt}E[\phi(t)]  &\stackrel{\partial_n\phi = 0}{=} - \int_{ \Omega } |\nabla \mu|^2 \ d \mathbf{x}, & \forall t \in (0,T)
-\end{align*}
+   \[\frac{d}{dt}E[\phi(t)]  \stackrel{\partial_n\phi = 0}{=} - \int_{ \Omega } |\nabla \mu|^2 \ d \mathbf{x}, \qquad \forall t \in (0,T) \]
 + Relaxed CH equation should decrease both energy functionals
-#+REVEAL_HTML: </div>
 
+  #+Reveal: split
 #+caption: Discrete Energy decrease in both solvers
 #+name: fig:relaxed-energy-balance
 [[file:images/relaxed-energy-balance.svg]]
 
 ** mass conservation
-
-#+caption: relaxed energy conservation for both solvers
+\begin{equation}
+\frac{d}{d t} \int_{\Omega} \phi ~\mathrm{d} \operatorname{\mathbf{x}} = 0
+\end{equation}
++ Discrete versions should satisfy
+\begin{equation}
+\sum_{i,j \in \Omega} \frac{\phi_{ij}^{n} - \phi_{ij}^{n+1}}{\Delta t} = 0
+\end{equation}
+#+Reveal: split
+#+caption:  energy conservation for both solvers
+#+name: fig:mass-balance
+[[file:images/mass_balance.svg]]
+#+Reveal: split
+#+caption: relaxed mass behavior
 #+name: fig:relaxed-mass-balance
 [[file:images/relaxed-mass-balance.svg]]
 ** Sub iteration
@@ -266,7 +270,20 @@ E_{rel}(\phi^{\alpha} , c^\alpha) :=
 :reveal_extra_attr: class="unis-blue-background"
 :END:
 #+Reveal: split
++ Baseline is mass conservative
++ Relaxed solver is not
++ Results are qualitatively similar
+  + differences occur mostly with high curvature
++ Relaxed solver depends on optimal \( \alpha \)
++ the elliptical system has to be solved implicitly
+** open points
++ runtime evaluations
++ parallel jacoby solver
+  + no multigrid
++ analytical convergence of the relaxation
 
+* References
+#+print_bibliography:
 * Discretization
 :PROPERTIES:
 :html_headline_class: unis-section-title

@@ -36,27 +36,27 @@
 
 </section>
 <section>
-<section id="slide-org8389154">
-<h2 id="org8389154">Table of Contents</h2>
+<section id="slide-org4bb852f">
+<h2 id="org4bb852f">Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#/slide-orgdd51b2f">The Cahn-Hilliard equation</a></li>
-<li><a href="#/slide-org4ca7f2c">Baseline solver</a></li>
-<li><a href="#/slide-orgc05ad38">Relaxation</a></li>
-<li><a href="#/slide-org4727a6d">Numerical Experiments</a></li>
-<li><a href="#/slide-org35672fd">Comparison</a></li>
-<li><a href="#/slide-orgb36e10b">Conclusion</a></li>
-<li><a href="#/slide-org805d01f">Discretization</a></li>
+<li><a href="#/slide-orgf38bb40">The Cahn-Hilliard equation</a></li>
+<li><a href="#/slide-org9ec0074">Baseline solver</a></li>
+<li><a href="#/slide-org2860849">Relaxation</a></li>
+<li><a href="#/slide-org81f4a35">Numerical Experiments</a></li>
+<li><a href="#/slide-orgf6d3a98">Conclusion</a></li>
+<li><a href="#/slide-orgb2fc519">References</a></li>
+<li><a href="#/slide-org9741566">Discretization</a></li>
 </ul>
 </div>
 </section>
 </section>
 <section>
-<section id="slide-orgdd51b2f" class="unis-blue-background">
-<h2 id="orgdd51b2f" class="unis-section-title">The Cahn-Hilliard equation</h2>
+<section id="slide-orgf38bb40" class="unis-blue-background">
+<h2 id="orgf38bb40" class="unis-section-title">The Cahn-Hilliard equation</h2>
 </section>
-<section id="slide-org8f0cbf6">
-<h3 id="org8f0cbf6">Variables</h3>
+<section id="slide-org0ecb0d9">
+<h3 id="org0ecb0d9">Variables</h3>
 <div style="display: flex;justify-content: center;">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -98,26 +98,26 @@
 <section>
 <div style="display: grid; grid-template-columns: auto auto; padding: 5rem; justify-content: center">
 
-<div id="org25eb2bd" class="figure">
+<div id="org95a7e3d" class="figure">
 <p><img src="images/domain.svg" alt="domain.svg" class="org-svg" />
 </p>
 <p><span class="figure-number">Figure 1: </span>Computational Domain \( \Omega \)</p>
 </div>
 
-<div id="orgb321fbd" class="figure">
+<div id="org8906d9d" class="figure">
 <p><img src="images/double-well.svg" alt="double-well.svg" class="org-svg" />
 </p>
 <p><span class="figure-number">Figure 2: </span>Double well potential \( W(\phi) \)</p>
 </div>
 </section>
-<section id="slide-org8695fbd" data-auto-animate>
-<h3 id="org8695fbd">Cahn-Hilliard Equation:</h3>
+<section id="slide-org0d7818b" data-auto-animate>
+<h3 id="org0d7818b">Cahn-Hilliard Equation:</h3>
 <p>
 The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{x} , t): \Omega \times (0,T) \to \mathbb{R} \) such that they satisfy
 </p>
 <div>
 \begin{equation}
-\label{org6e246b3}
+\label{orgde7b8d7}
 \begin{aligned}
 \partial_{t}\phi(x,t) &=  \nabla \cdot(M(\phi)\nabla\mu),\\
 \mu &= - \varepsilon^2 \Delta\phi  + W'(\phi), & \text{in} \, \Omega &\times (0,T),\\
@@ -136,8 +136,8 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 
 </ul>
 </section>
-<section id="slide-org5ccd647">
-<h3 id="org5ccd647" class="unis-subsection-title">Properties</h3>
+<section id="slide-org379a21f">
+<h3 id="org379a21f" class="unis-subsection-title">Properties</h3>
 <ul>
 <li class="fragment appear">Mass conservative</li>
 <li class="fragment appear">Total energy decreases</li>
@@ -157,8 +157,8 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 </section>
 </section>
 <section>
-<section id="slide-org4ca7f2c" class="unis-blue-background">
-<h2 id="org4ca7f2c" class="unis-section-title">Baseline solver</h2>
+<section id="slide-org9ec0074" class="unis-blue-background">
+<h2 id="org9ec0074" class="unis-section-title">Baseline solver</h2>
 </section>
 <section>
 <ul>
@@ -168,8 +168,8 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 
 </ul>
 </section>
-<section id="slide-orgd5f77c6" data-auto-animate>
-<h3 id="orgd5f77c6">Discrete Method:</h3>
+<section id="slide-org8c881f4" data-auto-animate>
+<h3 id="org8c881f4">Discrete Method:</h3>
 <div>
 \begin{equation}
 \begin{aligned}
@@ -181,15 +181,15 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 </div>
 <ul>
 <li>semi implicit in time</li>
-<li>centered difference in space (NO_ITEM_DATA:SHIN20117441) .</li>
+<li>centered difference in space (<a href="#citeproc_bib_item_1">Shin, Jeong, and Kim 2011</a>) .</li>
 
 </ul>
 </section>
-<section id="slide-orgfc43bb1" data-auto-animate>
-<h3 id="orgfc43bb1">Discrete Method:</h3>
+<section id="slide-orgf3e619b" data-auto-animate>
+<h3 id="orgf3e619b">Discrete Method:</h3>
 <div>
 \begin{equation}
-\label{org34f52fe}
+\label{org7e8e2bc}
 \begin{aligned}
 \frac{\color{RoyalBlue}{\phi_{ij}^{n+1}} - \color{Maroon}{\phi_{ij}^n}}{\Delta t}  &=  \color{RoyalBlue}{\nabla _d \cdot (G_{ij} \nabla_d \mu_{ij}^{n+\frac{1}{2}} )}  \,, \\
  \color{RoyalBlue}{\mu_{ij}^{n+\frac{1}{2}}} &= \color{RoyalBlue}{2\phi_{ij}^{n+1}} - \varepsilon^2  \color{RoyalBlue}{\nabla_d \cdot  (G_{ij} \nabla _d \phi_{ij}^{n+1} )} + \color{Maroon}{W'(\phi_{ij}^n) - 2\phi _{ij}^n} \,,
@@ -199,12 +199,12 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 </div>
 <ul>
 <li>semi implicit in time</li>
-<li>centered difference in space (NO_ITEM_DATA:SHIN20117441) .</li>
+<li>centered difference in space (<a href="#citeproc_bib_item_1">Shin, Jeong, and Kim 2011</a>) .</li>
 
 </ul>
 </section>
-<section id="slide-orgec7c857">
-<h3 id="orgec7c857">Variables</h3>
+<section id="slide-orga6af445">
+<h3 id="orga6af445">Variables</h3>
 <div style="display: flex;justify-content: center;">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -243,8 +243,8 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 </table>
 </div>
 </section>
-<section id="slide-org6f37d30">
-<h3 id="org6f37d30">solver</h3>
+<section id="slide-org5a0e555">
+<h3 id="org5a0e555">solver</h3>
 <ul>
 <li>solves equation of type</li>
 
@@ -271,11 +271,11 @@ DL \cdot
 </section>
 </section>
 <section>
-<section id="slide-orgc05ad38" class="unis-blue-background">
-<h2 id="orgc05ad38" class="unis-section-title">Relaxation</h2>
+<section id="slide-org2860849" class="unis-blue-background">
+<h2 id="org2860849" class="unis-section-title">Relaxation</h2>
 </section>
-<section id="slide-orgc32ba3a">
-<h3 id="orgc32ba3a">Variables</h3>
+<section id="slide-org9efc4fe">
+<h3 id="org9efc4fe">Variables</h3>
 <div style="display: flex;justify-content: center;">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -299,11 +299,11 @@ DL \cdot
 </table>
 </div>
 </section>
-<section id="slide-org477177a" data-auto-animate>
-<h3 id="org477177a" class="unis-subsection-title">Relaxed Cahn Hilliard equation</h3>
+<section id="slide-orgf88d92f" data-auto-animate>
+<h3 id="orgf88d92f" class="unis-subsection-title">Relaxed Cahn Hilliard equation</h3>
 <div>
 \begin{equation}
-\label{orgc1921e1}
+\label{org2f56b3e}
 \begin{aligned}
 \partial_{t}\phi^{\alpha}(x,t) &=  \Delta\mu, \\
 \mu &= - \varepsilon^2 \Delta\phi^{\alpha}  + W'(\phi^{\alpha}),
@@ -317,11 +317,11 @@ DL \cdot
 
 </ul>
 </section>
-<section id="slide-org8f0b7a9" data-auto-animate>
-<h3 id="org8f0b7a9" class="unis-subsection-title">Relaxed Cahn Hilliard equation</h3>
+<section id="slide-orgc09f13a" data-auto-animate>
+<h3 id="orgc09f13a" class="unis-subsection-title">Relaxed Cahn Hilliard equation</h3>
 <div>
 \begin{equation}
-\label{org1815764}
+\label{org2b8d7e6}
 \begin{aligned}
 \partial_t \phi^\alpha(x,t)  &= \Delta \mu \,,\\
 \mu &= \varepsilon ^2 \alpha(c^\alpha - \phi^\alpha) + W'(\phi^{\alpha}) .
@@ -335,11 +335,11 @@ DL \cdot
 
 </ul>
 </section>
-<section id="slide-org11ed9cf">
-<h3 id="org11ed9cf">Additional elliptical system</h3>
+<section id="slide-orgc450102">
+<h3 id="orgc450102">Additional elliptical system</h3>
 <div>
 \begin{align}
-\label{orgaf7531c}
+\label{orgf31c048}
 - \Delta c^\alpha  + \alpha c^a &= \alpha \phi ^\alpha,
 \end{align}
 
@@ -352,8 +352,8 @@ DL \cdot
 
 </ul>
 </section>
-<section id="slide-org71bc1db">
-<h3 id="org71bc1db">Implementation</h3>
+<section id="slide-orgf2f7370">
+<h3 id="orgf2f7370">Implementation</h3>
 <ul>
 <li>implicit in \( c \)</li>
 <li>solves both equations in tandem</li>
@@ -361,156 +361,169 @@ DL \cdot
 
 </ul>
 </section>
-<section id="slide-orgf6548b5">
-<h3 id="orgf6548b5">Exlicit and implicit solution of c</h3>
-<div style="display: grid; grid-template-columns: auto auto; padding: 5rem; justify-content: center">
+<section id="slide-orgbe19f64">
+<h3 id="orgbe19f64">Explicit solution of c</h3>
 
-<div id="orge8a6e5c" class="figure">
+<div id="org36cc6ee" class="figure">
 <p><img src="images/explicit-elips-smooth.svg" alt="explicit-elips-smooth.svg" class="org-svg" />
 </p>
-<p><span class="figure-number">Figure 3: </span>exlicit solution of c</p>
-</div>
-
-<div id="orgc58b03a" class="figure">
-<p><img src="images/alternating-elips-smooth.svg" alt="alternating-elips-smooth.svg" class="org-svg" />
-</p>
-<p><span class="figure-number">Figure 4: </span>implicit solution of c by alternating solving \phhi and c</p>
+<p><span class="figure-number">Figure 3: </span>explicit solution of c</p>
 </div>
 </section>
-<section id="slide-org8f0fc9a">
-<h3 id="org8f0fc9a">choice of &alpha;</h3>
+<section id="slide-org5449cac">
+<h3 id="org5449cac">Implicit solution of c</h3>
 
-<div id="orgbc0db65" class="figure">
+<div id="orgf1120e2" class="figure">
+<p><img src="images/alternating-elips-smooth.svg" alt="alternating-elips-smooth.svg" class="org-svg" />
+</p>
+<p><span class="figure-number">Figure 4: </span>implicit solution of c by alternating solving &phi; and c</p>
+</div>
+</section>
+<section id="slide-org225e523">
+<h3 id="org225e523">choice of \( \alpha \) for fixed \( \varepsilon \)</h3>
+
+<div id="org1ea1cc6" class="figure">
 <p><img src="images/alpha-error.svg" alt="alpha-error.svg" class="org-svg" />
 </p>
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org4727a6d" class="unis-blue-background">
-<h2 id="org4727a6d" class="unis-section-title">Numerical Experiments</h2>
+<section id="slide-org81f4a35" class="unis-blue-background">
+<h2 id="org81f4a35" class="unis-section-title">Numerical Experiments</h2>
 </section>
-<section id="slide-org893e463">
-<h3 id="org893e463">Energy</h3>
-<div style="display: grid; grid-template-columns: auto auto; padding: 5rem;">
-<div>
+<section id="slide-orgecaea0e">
+<h3 id="orgecaea0e">Energy</h3>
 <ul>
-<li>The CH equation is related to the following energy functional</li>
+<li class="fragment appear">The CH equation is related to the following energy functional
+\[E^{\text{bulk}}[\phi] = \int_{\Omega} \frac{\varepsilon^2}{2} |\nabla \phi |^2 + W(\phi) \, dx  \]</li>
+<li class="fragment appear">The relaxed CH has the following related energy functional
+\[E_{rel}(\phi^{\alpha} , c^\alpha) := \int_{\Omega}  \frac{1}{2}\varepsilon^2 \alpha (c^\alpha - \phi^{\alpha})^2 + W(x) \ d \operatorname{\mathbf{x}} \]</li>
+<li class="fragment appear">Total energy decreases for the CH equation and the relaxed CH equation
+\[\frac{d}{dt}E[\phi(t)]  \stackrel{\partial_n\phi = 0}{=} - \int_{ \Omega } |\nabla \mu|^2 \ d \mathbf{x}, \qquad \forall t \in (0,T) \]</li>
+<li class="fragment appear"><p>
+Relaxed CH equation should decrease both energy functionals
+</p>
+
+</section>
+<section></li>
 
 </ul>
-<div>
-\begin{align}
-\label{orgd2978e5}
-E^{\text{bulk}}[\phi] &= \int_{\Omega} \frac{\varepsilon^2}{2} |\nabla \phi |^2 + W(\phi) \, dx ,
-\end{align}
 
-</div>
-<ul>
-<li>The relaxed CH has the following related energy functional</li>
-
-</ul>
-<div>
-\begin{equation}
-\label{org7fc44c2}
-E_{rel}(\phi^{\alpha} , c^\alpha) :=
-\int_{\Omega}  \frac{1}{2}\varepsilon^2 \alpha (c^\alpha - \phi^{\alpha})^2 + W(x) \ d \operatorname{\mathbf{x}}
-\end{equation}
-
-</div>
-<ul>
-<li>Total energy decreases for the CH equation and the relaxed CH equation</li>
-
-</ul>
-<div>
-\begin{align*}
-\frac{d}{dt}E[\phi(t)]  &\stackrel{\partial_n\phi = 0}{=} - \int_{ \Omega } |\nabla \mu|^2 \ d \mathbf{x}, & \forall t \in (0,T)
-\end{align*}
-
-</div>
-<ul>
-<li>Relaxed CH equation should decrease both energy functionals</li>
-
-</ul>
-</div>
-
-
-<div id="org0bc9605" class="figure">
+<div id="orgc0e6bfe" class="figure">
 <p><img src="images/relaxed-energy-balance.svg" alt="relaxed-energy-balance.svg" class="org-svg" />
 </p>
 <p><span class="figure-number">Figure 5: </span>Discrete Energy decrease in both solvers</p>
 </div>
 </section>
-<section id="slide-org09429d2">
-<h3 id="org09429d2">mass conservation</h3>
+<section id="slide-org27985c8">
+<h3 id="org27985c8">mass conservation</h3>
+<div>
+\begin{equation}
+\frac{d}{d t} \int_{\Omega} \phi ~\mathrm{d} \operatorname{\mathbf{x}} = 0
+\end{equation}
 
-<div id="orgb650f2a" class="figure">
+</div>
+<ul>
+<li>Discrete versions should satisfy</li>
+
+</ul>
+<div>
+\begin{equation}
+\sum_{i,j \in \Omega} \frac{\phi_{ij}^{n} - \phi_{ij}^{n+1}}{\Delta t} = 0
+\end{equation}
+
+</div>
+</section>
+<section>
+
+<div id="org655be77" class="figure">
+<p><img src="images/mass_balance.svg" alt="mass_balance.svg" class="org-svg" />
+</p>
+<p><span class="figure-number">Figure 6: </span>energy conservation for both solvers</p>
+</div>
+</section>
+<section>
+
+<div id="orgb5f2045" class="figure">
 <p><img src="images/relaxed-mass-balance.svg" alt="relaxed-mass-balance.svg" class="org-svg" />
 </p>
-<p><span class="figure-number">Figure 6: </span>relaxed energy conservation for both solvers</p>
+<p><span class="figure-number">Figure 7: </span>relaxed mass behavior</p>
 </div>
 </section>
-<section id="slide-orgaf66cc4">
-<h3 id="orgaf66cc4">Sub iteration</h3>
+<section id="slide-org3764de5">
+<h3 id="org3764de5">Sub iteration</h3>
 
-<div id="org8d3e305" class="figure">
+<div id="orgf76fd08" class="figure">
 <p><img src="images/relaxed-convergence.svg" alt="relaxed-convergence.svg" class="org-svg" />
 </p>
-<p><span class="figure-number">Figure 7: </span>Behaviour of both solvers during sub-iterations</p>
+<p><span class="figure-number">Figure 8: </span>Behaviour of both solvers during sub-iterations</p>
 </div>
 </section>
-<section id="slide-org3d9dfb8">
-<h3 id="org3d9dfb8">time</h3>
+<section id="slide-org9f9b7c7">
+<h3 id="org9f9b7c7">time</h3>
 
-<div id="org705deb7" class="figure">
+<div id="org7fb8753" class="figure">
 <p><img src="images/relaxed-time-stability.svg" alt="relaxed-time-stability.svg" class="org-svg" />
 </p>
-<p><span class="figure-number">Figure 8: </span>Behaviour of both solvers when varying time-step size</p>
+<p><span class="figure-number">Figure 9: </span>Behaviour of both solvers when varying time-step size</p>
 </div>
 </section>
-</section>
-<section>
-<section id="slide-org35672fd" class="unis-blue-background">
-<h2 id="org35672fd" class="unis-section-title">Comparison</h2>
-</section>
-<section>
+<section id="slide-org8baa588">
+<h3 id="org8baa588">Direct comparison of the baseline solver with the relaxed solver</h3>
 
-
-<div id="org629cdac" class="figure">
+<div id="orgd309735" class="figure">
 <p><img src="images/relaxed-comparison.gif" alt="relaxed-comparison.gif" />
 </p>
 </div>
-
+</section>
 </section>
 <section>
+<section id="slide-orgf6d3a98" class="unis-blue-background">
+<h2 id="orgf6d3a98" class="unis-section-title">Conclusion</h2>
+</section>
+<section>
+<ul>
+<li>Baseline is mass conservative</li>
+<li>Relaxed solver is not</li>
+<li>Results are qualitatively similar
+<ul>
+<li>differences occur mostly with high curvature</li>
 
-<div style="display: grid; grid-template-columns: auto auto; padding: 5rem;">
+</ul></li>
+<li>Relaxed solver depends on optimal \( \alpha \)</li>
+<li>the elliptical system has to be solved implicitly</li>
 
+</ul>
+</section>
+<section id="slide-orgc599819">
+<h3 id="orgc599819">open points</h3>
+<ul>
+<li>runtime evaluations</li>
+<li>parallel jacoby solver
+<ul>
+<li>no multigrid</li>
 
-<div id="orgefe02bd" class="figure">
-<p><img src="images/relaxed-anim.gif" alt="relaxed-anim.gif" />
-</p>
+</ul></li>
+<li>analytical convergence of the relaxation</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgb2fc519">
+<h2 id="orgb2fc519">References</h2>
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Shin, Jaemin, Darae Jeong, and Junseok Kim. 2011. “A Conservative Numerical Method for the Cahn–Hilliard Equation in Complex Domains.” <i>Journal of Computational Physics</i> 230 (19): 7441–55. <a href="https://doi.org/https://doi.org/10.1016/j.jcp.2011.06.009">https://doi.org/https://doi.org/10.1016/j.jcp.2011.06.009</a>.</div>
 </div>
-
-
-<div id="orgfde4544" class="figure">
-<p><img src="images/iteration.gif" alt="iteration.gif" />
-</p>
-</div>
 </section>
 </section>
 <section>
-<section id="slide-orgb36e10b" class="unis-blue-background">
-<h2 id="orgb36e10b" class="unis-section-title">Conclusion</h2>
+<section id="slide-org9741566" class="unis-blue-background">
+<h2 id="org9741566" class="unis-section-title">Discretization</h2>
 </section>
-<section>
-</section>
-</section>
-<section>
-<section id="slide-org805d01f" class="unis-blue-background">
-<h2 id="org805d01f" class="unis-section-title">Discretization</h2>
-</section>
-<section id="slide-orgfef1186">
-<h3 id="orgfef1186">Domain</h3>
+<section id="slide-orge9b01e2">
+<h3 id="orge9b01e2">Domain</h3>
 <div>
 \begin{equation}
 \Omega_d = \left\{ i,j \mid i,j \in \mathbb{N} \,, i,j \in [2,N+1] \right\}
@@ -537,8 +550,8 @@ G_{ij} &=
 
 </div>
 </section>
-<section id="slide-orgd66a153">
-<h3 id="orgd66a153">Finite Differences</h3>
+<section id="slide-org91f41c3">
+<h3 id="org91f41c3">Finite Differences</h3>
 <div>
 \begin{align}
 D_x\phi^{n+1,m}_{i+\frac{1}{2} j} &= \frac{\phi^{n+1,m}_{i+1j} - \phi^{n+1,m}_{ij}}{h} & D_y\phi^{n+1,m}_{ij+\frac{1}{2}} &= \frac{\phi^{n+1,m}_{ij+1} - \phi^{n+1,m}_{ij}}{h}
@@ -549,11 +562,11 @@ D_x\phi^{n+1,m}_{i+\frac{1}{2} j} &= \frac{\phi^{n+1,m}_{i+1j} - \phi^{n+1,m}_{i
 We define \( D_x\mu_{ij}^{n+\frac{1}{2},m} , D_y\mu_{ij}^{n+\frac{1}{2},m} \) in the same way.
 </p>
 </section>
-<section id="slide-orge3891a3" data-auto-animate>
-<h3 id="orge3891a3">Discrete CH equation</h3>
+<section id="slide-orge64f56a" data-auto-animate>
+<h3 id="orge64f56a">Discrete CH equation</h3>
 <div>
 \begin{equation}
-\label{org7bf7037}
+\label{org44ad358}
 \begin{aligned}
 \frac{\phi_{ij}^{n+1} - \phi_{ij}^n}{\Delta t}  &=  \nabla _d \cdot (G_{ij} \nabla_d \mu_{ij}^{n+\frac{1}{2}} )  \,, \\
  \mu_{ij}^{n+\frac{1}{2}} &= 2\phi_{ij}^{n+1} - \varepsilon^2  \nabla_d \cdot  (G_{ij} \nabla _d \phi_{ij}^{n+1} ) + W'(\phi_{ij}^n) - 2\phi _{ij}^n \,,
@@ -562,11 +575,11 @@ We define \( D_x\mu_{ij}^{n+\frac{1}{2},m} , D_y\mu_{ij}^{n+\frac{1}{2},m} \) in
 
 </div>
 </section>
-<section id="slide-orgb6ce258" data-auto-animate>
-<h3 id="orgb6ce258">Discrete CH equation</h3>
+<section id="slide-org373b85b" data-auto-animate>
+<h3 id="org373b85b">Discrete CH equation</h3>
 <div>
 \begin{equation}
-\label{org0e12b58}
+\label{org989a76c}
 \begin{aligned}
 \frac{\phi_{ij}^{n+1,\alpha} - \phi_{ij}^{n,\alpha}}{\Delta t}  &=  \nabla _d \cdot (G_{ij} \nabla_d \mu_{ij}^{n+\frac{1}{2},\alpha} )  \,,\\
  \mu_{ij}^{n+\frac{1}{2},\alpha} &= 2\phi_{ij}^{n+1,\alpha} - \varepsilon^2 a(c_{ij}^{n+1,\alpha} - \phi_{ij}^{n+1,\alpha})  + W'(\phi_{ij}^{n,\alpha}) - 2\phi _{ij}^{n,\alpha} \,.
@@ -575,8 +588,8 @@ We define \( D_x\mu_{ij}^{n+\frac{1}{2},m} , D_y\mu_{ij}^{n+\frac{1}{2},m} \) in
 
 </div>
 </section>
-<section id="slide-org35abc49">
-<h3 id="org35abc49">b</h3>
+<section id="slide-orgf841cf7">
+<h3 id="orgf841cf7">b</h3>
 <div>
 \begin{align*}
 \begin{pmatrix}
