@@ -26,29 +26,18 @@
 :html_headline_class: unis-section-title
 :reveal_extra_attr: class="unis-blue-background"
 :END:
-** uses
+** rough explanation what CH does
 + multiphase coupling equation
++ implicit interface
++ 2 phase flow
+** animation CH
+[[file:images/iteration.gif]]
+
 * The Cahn-Hilliard equation
 :PROPERTIES:
 :html_headline_class: unis-section-title
 :reveal_extra_attr: class="unis-blue-background"
 :END:
-** Variables
-#+Reveal_html: <div style="display: flex;justify-content: center;">
-| \( M(\phi): [-1,1] \to \mathbb{R}^+ \)  | Mobility coefficient        |
-| \( W(\phi): [-1,1] \to \mathbb{R}^+ \)  | Double well potential       |
-| \( \varepsilon > 0 \in \mathbb{R} \)           | Interface coefficient       |
-| \( \phi : \Omega \times (0,T) \to \mathbb{R}^d \) | Phase-field *variable*        |
-| \( \mu : \Omega \times (0,T) \to \mathbb{R}^d \) | Chemical potential *variable* |
-#+reveal_html: </div>
-#+reveal: split
-#+REVEAL_HTML: <div style="display: grid; grid-template-columns: auto auto; padding: 5rem; justify-content: center">
-#+caption: Computational Domain \( \Omega \)
-#+name: fig:domain
-[[file:images/domain.svg]]
-#+caption: Double well potential \( W(\phi) \)
-#+name: fig:double-well
-[[file:images/double-well.svg]]
 ** Cahn-Hilliard Equation:
 :PROPERTIES:
 :reveal_extra_attr: data-auto-animate
@@ -66,12 +55,28 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 \end{aligned}
 \end{equation}
 
+** Variables
+#+Reveal_html: <div style="display: flex;justify-content: center;">
+| \( \phi : \Omega \times (0,T) \to \mathbb{R}^d \) | Phase-field *variable*        |
+| \( \mu : \Omega \times (0,T) \to \mathbb{R}^d \) | Chemical potential *variable* |
+| \( \varepsilon > 0 \in \mathbb{R} \)           | Interface coefficient       |
+| \( W(\phi): [-1,1] \to \mathbb{R}^+ \)  | Double well potential       |
+| \( M(\phi): [-1,1] \to \mathbb{R}^+ \)  | Mobility coefficient        |
+#+reveal_html: </div>
+#+reveal: split
+#+REVEAL_HTML: <div style="display: grid; grid-template-columns: auto auto; padding: 5rem; justify-content: center">
+#+caption: Computational Domain \( \Omega \)
+#+name: fig:domain
+[[file:images/domain.svg]]
+#+caption: Double well potential \( W(\phi) \)
+#+name: fig:double-well
+[[file:images/double-well.svg]]
+#+attr_reveal: split
 #+attr_reveal: :frag (appear)
 + constant mobility \( M(\phi) \equiv 1 \)
 + polynomial potential \( W(\phi) = \frac{1}{4} \phi^2(1-\phi^2) \)
 + no flow Neumann boundary conditions
 #+name: eq:boundary-conditions
-
 ** Properties
 :PROPERTIES:
 :html_headline_class: unis-subsection-title
@@ -84,78 +89,11 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
   + gives position of phases
 + 4th order (2 dimensional second order)
   + expensive
-* Baseline solver
-:PROPERTIES:
-:html_headline_class: unis-section-title
-:reveal_extra_attr: class="unis-blue-background"
-:END:
-
-#+REVEAL: split
-#+attr_reveal: :frag (appear)
-+ Implicit in time
-+ discretized on NxN grid
-+ uses multi-grid scheme
-** Discrete Method:
-:PROPERTIES:
-:reveal_extra_attr: data-auto-animate
-:END:
-#+ATTR_REVEAL: :data-id eq
-\begin{equation}
-\begin{aligned}
-\partial_{t}\phi(x,t) &=  \nabla \cdot(M(\phi)\nabla\mu), \\
-\mu &= - \varepsilon^2 \Delta\phi  + W'(\phi),
-\end{aligned}
-\end{equation}
-+ semi implicit in time
-+ centered difference in space [cite:@SHIN20117441] .
-** Discrete Method:
-:PROPERTIES:
-:reveal_extra_attr: data-auto-animate
-:END:
-#+ATTR_REVEAL: :data-id eq
-#+name: eq:discrete-cahn-hilliard
-\begin{equation}
-\begin{aligned}
-\frac{\color{RoyalBlue}{\phi_{ij}^{n+1}} - \color{Maroon}{\phi_{ij}^n}}{\Delta t}  &=  \color{RoyalBlue}{\nabla _d \cdot (G_{ij} \nabla_d \mu_{ij}^{n+\frac{1}{2}} )}  \,, \\
- \color{RoyalBlue}{\mu_{ij}^{n+\frac{1}{2}}} &= \color{RoyalBlue}{2\phi_{ij}^{n+1}} - \varepsilon^2  \color{RoyalBlue}{\nabla_d \cdot  (G_{ij} \nabla _d \phi_{ij}^{n+1} )} + \color{Maroon}{W'(\phi_{ij}^n) - 2\phi _{ij}^n} \,,
-\end{aligned}
-\end{equation}
-+ semi implicit in time
-+ centered difference in space [cite:@SHIN20117441] .
-** Variables
-#+Reveal_html: <div style="display: flex;justify-content: center;">
-| \( b \)   | \( b = DL \cdot \left( \phi_{ij}^{n+1} , \mu_{ij}^{n+\frac{1}{2}} \right)^T - L \left(  \phi_{ij}^{n+1} , \mu_{ij}^{n+\frac{1}{2}}  \right) \) |
-| \( DL \)  | Jacobian of \( L \)                                    |
-| \( \color{RoyalBlue}{L} \) | Implicit terms of the discrete CH equation |
-| \( \color{Maroon}{\left( \zeta_{ij}^n , \psi_{ij}^{n} \right)} \) | Explicit terms of the discrete CH equation |
-| \( \Omega_d \) | discrete version of the computational domain \( \Omega \)   |
-#+Reveal_html: </div>
-
-** solver
-+ solves equation of type
-\begin{equation}
-DL \cdot
-\begin{pmatrix}
-\phi^{n+1}_{ij} \\
-\mu^{n+\frac{1}{2}}_{ij}
-\end{pmatrix}
-= b
-\end{equation}
-+ with Gauss Seidel iteration
-+ for every point \( (i,j) \in \Omega_d \)
-+ using a  two grid method
-+ multiple times per sub-iteration
-+ multiple sub-iterations per time-step
 * Relaxation
 :PROPERTIES:
 :html_headline_class: unis-section-title
 :reveal_extra_attr: class="unis-blue-background"
 :END:
-** Variables
-#+Reveal_html: <div style="display: flex;justify-content: center;">
-| \( \alpha > 0 \) | relaxation parameter |
-| \( c^{\alpha}:\Omega \times (0,T) \to \mathbb{R}^d \)  | solution of an elliptical system |
-#+Reveal_html: </div>
 ** Relaxed Cahn Hilliard equation
 :PROPERTIES:
 :reveal_extra_attr: data-auto-animate
@@ -186,7 +124,12 @@ DL \cdot
 + simpler PDE
 + second order
 
-** Additional elliptical system
+** Variables
+#+Reveal_html: <div style="display: flex;justify-content: center;">
+| \( \alpha > 0 \) | relaxation parameter |
+| \( c^{\alpha}:\Omega \times (0,T) \to \mathbb{R}^d \)  | solution of an elliptical system |
+#+Reveal_html: </div>
+** Additional elliptical system to solve for c
 #+name: eq:elliptical-equation
 \begin{align}
 - \Delta c^\alpha  + \alpha c^a &= \alpha \phi ^\alpha,
@@ -200,40 +143,99 @@ DL \cdot
 + implicit in \( c \)
 + solves both equations in tandem
 + resolving \( c \) during each sub-iteration required
-** Explicit solution of c
-# #+REVEAL_HTML: <div style="display: grid; grid-template-columns: auto auto; padding: 5rem; justify-content: center">
-#+caption: explicit solution of c
-#+name: fig:relaxed-smooth-eval
-[[file:images/explicit-elips-smooth.svg]]
-
-** Implicit solution of c
-#+caption: implicit solution of c by alternating solving \phi and c
-#+name: fig:alternating-elips-smooth
-[[file:images/alternating-elips-smooth.svg]]
-** choice of \( \alpha \) for fixed \( \varepsilon \)
-#+name: fig:alpha-error
-[[file:images/alpha-error.svg]]
-
+* Numerical solver
+:PROPERTIES:
+:html_headline_class: unis-section-title
+:reveal_extra_attr: class="unis-blue-background"
+:END:
+** Numerical solver
+#+attr_reveal: :frag (appear)
++ follows Finite Difference Discretization from [cite:@SHIN20117441]
++ Implicit in time
++ discretized on NxN grid
++ uses multi-grid scheme
++ derives a linear system from the CH and the relaxed CH equation
+** sketch of baseline solver
+[[file:images/Two-grid-scheme.svg]]
+** scetch of the relaxed solver
+[[file:images/Two-grid-scheme-relaxed.svg]]
 * Numerical Experiments
 :PROPERTIES:
 :html_headline_class: unis-section-title
 :reveal_extra_attr: class="unis-blue-background"
 :END:
+** Explicit solution of c
+#+REVEAL_HTML: <div style="display: grid; grid-template-columns: 2fr 1fr; padding: 5rem; justify-content: center">
+
+#+caption: explicit solution of c
+#+name: fig:relaxed-smooth-eval
+[[file:images/explicit-elips-smooth.svg]]
+
+#+reveal_html: <div>
+#+attr_reveal: :frag (appear)
++ smaller \varepsilon \(\implies\) smaller interface
++ both \varepsilon and \alpha have efect on interface
++ explicit solution cannot develop interface
++ artefacts for small values of \alpha
++ ni interface for large \alpha
+#+reveal_html: </div>
+** Implicit solution of c
+#+REVEAL_HTML: <div style="display: grid; grid-template-columns: 2fr 1fr; padding: 5rem; justify-content: center">
+#+caption: implicit solution of c by alternating solving \phi and c
+#+name: fig:alternating-elips-smooth
+[[file:images/alternating-elips-smooth.svg]]
+
+#+reveal_html: <div>
+#+attr_reveal: :frag (appear)
++ better at approximating reference
++ at approximately simillar \varepsilon
++ struggles with wide interface
++ suggests optimal value for \alpha
+#+reveal_html: </div>
+** choice of \( \alpha \) for fixed \( \varepsilon \)
+#+REVEAL_HTML: <div style="display: grid; grid-template-columns: 2fr 1fr; padding: 5rem; justify-content: center">
+#+name: fig:alpha-error
+[[file:images/alpha-error.svg]]
+
+#+reveal_html: <div>
+#+attr_reveal: :frag (appear)
++ optimal at \(\approx 7.5* 10^5\)
+#+reveal_html: </div>
+** optimizing \alpha and \varepsilon
++ We implemented a monte carlo optimizer
+  + minimizing \(\phi - \phi^\alpha\) after one timestep
+  + selecting from a Normal distribution around the current optimum
+  + \(\sigma_\varepsilon = 0.01\)
+  + \(\sigma_\alpha = 10000\)
++ values for alpha were erratic between \(10^5 \to 10^6\)
++ \varepsilon was simillar to the \varepsilon used in the baselline
++ suggests \alpha and \varepsilon are independant
+
 ** Energy
 # #+REVEAL_HTML: <div style="display: grid; grid-template-columns: auto auto; padding: 5rem;">
 #+attr_reveal: :frag (appear)
 + The CH equation is related to the following energy functional
    \[E^{\text{bulk}}[\phi] = \int_{\Omega} \frac{\varepsilon^2}{2} |\nabla \phi |^2 + W(\phi) \, dx  \]
-+ The relaxed CH has the following related energy functional
++ The relaxed CH has the following related energy functional similar to the approach in [cite:@CORLI2014773]
    \[E_{rel}(\phi^{\alpha} , c^\alpha) := \int_{\Omega}  \frac{1}{2}\varepsilon^2 \alpha (c^\alpha - \phi^{\alpha})^2 + W(x) \ d \operatorname{\mathbf{x}} \]
 + Total energy decreases for the CH equation and the relaxed CH equation
    \[\frac{d}{dt}E[\phi(t)]  \stackrel{\partial_n\phi = 0}{=} - \int_{ \Omega } |\nabla \mu|^2 \ d \mathbf{x}, \qquad \forall t \in (0,T) \]
 + Relaxed CH equation should decrease both energy functionals
 
-  #+Reveal: split
+** Baseline and relaxed energy decay
+#+REVEAL_HTML: <div style="display: grid; grid-template-columns: 2fr 1fr; padding: 5rem; justify-content: center">
 #+caption: Discrete Energy decrease in both solvers
 #+name: fig:relaxed-energy-balance
 [[file:images/relaxed-energy-balance.svg]]
+#+reveal_html: <div>
+#+attr_reveal: :frag (appear)
++ both solvers exhibit energy decay
++ visually less interface surface
++ initially fast decay
+  + sharp initial conditions
++ relaxed decays faster
+  + more aggresive
+#+reveal_html: </div>
 
 ** mass conservation
 \begin{equation}
@@ -243,25 +245,50 @@ DL \cdot
 \begin{equation}
 \sum_{i,j \in \Omega} \frac{\phi_{ij}^{n} - \phi_{ij}^{n+1}}{\Delta t} = 0
 \end{equation}
-#+Reveal: split
+** Baseline mass balance
+#+REVEAL_HTML: <div style="display: grid; grid-template-columns: 2fr 1fr; padding: 5rem; justify-content: center">
 #+caption:  energy conservation for both solvers
 #+name: fig:mass-balance
 [[file:images/mass_balance.svg]]
+#+reveal_html: <div>
+#+attr_reveal: :frag (appear)
++ machine precision
++ mass conservative
+#+reveal_html: </div>
 #+Reveal: split
 #+caption: relaxed mass behavior
 #+name: fig:relaxed-mass-balance
 [[file:images/relaxed-mass-balance.svg]]
+#+reveal_html: <div>
+#+attr_reveal: :frag (appear)
++ far from machine precision \(0.01 >> 10^{-16}\)
+#+reveal_html: </div>
 ** Sub iteration
+#+REVEAL_HTML: <div style="display: grid; grid-template-columns: 2fr 1fr; padding: 5rem; justify-content: center">
 #+caption: Behaviour of both solvers during sub-iterations
 #+name: fig:relaxed-convergence
 [[file:images/relaxed-convergence.svg]]
-** time
-#+caption: Behaviour of both solvers when varying time-step size
-#+name: fig:relaxed-stability-in-time
-[[file:images/relaxed-time-stability.svg]]
+#+reveal_html: <div>
+#+attr_reveal: :frag (appear)
++ relaxed solver uses more subiterations
+  + each sub iteration was faster in experiments
++ relaxed solver might not converge  correct
++ both solvers take comparable wall time
+#+reveal_html: </div>
 ** Direct comparison of the baseline solver with the relaxed solver
-
+#+REVEAL_HTML: <div style="display: grid; grid-template-rows: 2fr 1fr; padding: 5rem; justify-content: center">
+#+caption: Direct Comparison of both solvers for chosen initial condition
+#+name: fig:comparison
 [[file:images/relaxed-comparison.gif]]
+#+reveal_html: <div>
+#+attr_reveal: :frag (appear)
++ cherry picked example with visual difference
++ difference largest in the beginning
+  + has to smooth sharp initial condition
++ differences largest in areas with high curvature
++ behavior similar
+  + except for mass conservation
+#+reveal_html: </div>
 
 
 * Conclusion
@@ -284,12 +311,13 @@ DL \cdot
 
 * References
 #+print_bibliography:
-* Discretization
+* Appendix
+** Discretization
 :PROPERTIES:
 :html_headline_class: unis-section-title
 :reveal_extra_attr: class="unis-blue-background"
 :END:
-** Domain
+*** Domain
 \begin{equation}
 \Omega_d = \left\{ i,j \mid i,j \in \mathbb{N} \,, i,j \in [2,N+1] \right\}
 \end{equation}
@@ -306,12 +334,12 @@ G_{ij} &=
 0, & \text{else}
 \end{cases}
 \end{align*}
-** Finite Differences
+*** Finite Differences
 \begin{align}
 D_x\phi^{n+1,m}_{i+\frac{1}{2} j} &= \frac{\phi^{n+1,m}_{i+1j} - \phi^{n+1,m}_{ij}}{h} & D_y\phi^{n+1,m}_{ij+\frac{1}{2}} &= \frac{\phi^{n+1,m}_{ij+1} - \phi^{n+1,m}_{ij}}{h}
 \end{align}
 We define \( D_x\mu_{ij}^{n+\frac{1}{2},m} , D_y\mu_{ij}^{n+\frac{1}{2},m} \) in the same way.
-** Discrete CH equation
+*** Discrete CH equation
 :PROPERTIES:
 :reveal_extra_attr: data-auto-animate
 :END:
@@ -322,7 +350,7 @@ We define \( D_x\mu_{ij}^{n+\frac{1}{2},m} , D_y\mu_{ij}^{n+\frac{1}{2},m} \) in
  \mu_{ij}^{n+\frac{1}{2}} &= 2\phi_{ij}^{n+1} - \varepsilon^2  \nabla_d \cdot  (G_{ij} \nabla _d \phi_{ij}^{n+1} ) + W'(\phi_{ij}^n) - 2\phi _{ij}^n \,,
 \end{aligned}
 \end{equation}
-** Discrete CH equation
+*** Discrete CH equation
 :PROPERTIES:
 :reveal_extra_attr: data-auto-animate
 :END:
@@ -333,7 +361,7 @@ We define \( D_x\mu_{ij}^{n+\frac{1}{2},m} , D_y\mu_{ij}^{n+\frac{1}{2},m} \) in
  \mu_{ij}^{n+\frac{1}{2},\alpha} &= 2\phi_{ij}^{n+1,\alpha} - \varepsilon^2 a(c_{ij}^{n+1,\alpha} - \phi_{ij}^{n+1,\alpha})  + W'(\phi_{ij}^{n,\alpha}) - 2\phi _{ij}^{n,\alpha} \,.
 \end{aligned}
 \end{equation}
-** b
+*** b
 \begin{align*}
 \begin{pmatrix}
 \zeta^n_{ij}
@@ -350,3 +378,49 @@ W'(\phi_{ij}^n) - 2\phi_{ij}^n
 
 
 # #+PRINT_BIBLIOGRAPHY:
+
+*** time
+#+caption: Behaviour of both solvers when varying time-step size
+#+name: fig:relaxed-stability-in-time
+[[file:images/relaxed-time-stability.svg]]
+
+
+** solver details
+*** Discretized form of the CH equation :
+:PROPERTIES:
+:reveal_extra_attr: data-auto-animate
+:END:
+#+ATTR_REVEAL: :data-id eq
+\begin{equation}
+\begin{aligned}
+\partial_{t}\phi(x,t) &=  \nabla \cdot(M(\phi)\nabla\mu), \\
+\mu &= - \varepsilon^2 \Delta\phi  + W'(\phi),
+\end{aligned}
+\end{equation}
++ semi implicit in time
++ centered difference in space [cite:@SHIN20117441] .
+*** Discretized form of the Ch equation :
+:PROPERTIES:
+:reveal_extra_attr: data-auto-animate
+:END:
+
+
+#+ATTR_REVEAL: :data-id eq
+#+caption: red terms are explicit blue terms implicit in time
+#+name: eq:discrete-cahn-hilliard
+\begin{equation}
+\begin{aligned}
+\frac{\color{RoyalBlue}{\phi_{ij}^{n+1}} - \color{Maroon}{\phi_{ij}^n}}{\Delta t}  &=  \color{RoyalBlue}{\nabla _d \cdot (G_{ij} \nabla_d \mu_{ij}^{n+\frac{1}{2}} )}  \,, \\
+ \color{RoyalBlue}{\mu_{ij}^{n+\frac{1}{2}}} &= \color{RoyalBlue}{2\phi_{ij}^{n+1}} - \varepsilon^2  \color{RoyalBlue}{\nabla_d \cdot  (G_{ij} \nabla _d \phi_{ij}^{n+1} )} + \color{Maroon}{W'(\phi_{ij}^n) - 2\phi _{ij}^n} \,,
+\end{aligned}
+\end{equation}
++ semi implicit in time
++ centered difference in space [cite:@SHIN20117441] .
+*** Variables
+#+Reveal_html: <div style="display: flex;justify-content: center;">
+| \( b \)   | \( b = DL \cdot \left( \phi_{ij}^{n+1} , \mu_{ij}^{n+\frac{1}{2}} \right)^T - L \left(  \phi_{ij}^{n+1} , \mu_{ij}^{n+\frac{1}{2}}  \right) \) |
+| \( DL \)  | Jacobian of \( L \)                                    |
+| \( \color{RoyalBlue}{L} \) | Implicit terms of the discrete CH equation |
+| \( \color{Maroon}{\left( \zeta_{ij}^n , \psi_{ij}^{n} \right)} \) | Explicit terms of the discrete CH equation |
+| \( \Omega_d \) | discrete version of the computational domain \( \Omega \)   |
+#+Reveal_html: </div>
