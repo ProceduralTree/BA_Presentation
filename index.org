@@ -71,12 +71,11 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 #+caption: Double well potential \( W(\phi) \)
 #+name: fig:double-well
 [[file:images/double-well.svg]]
-#+attr_reveal: split
+** Assumptions
 #+attr_reveal: :frag (appear)
 + constant mobility \( M(\phi) \equiv 1 \)
 + polynomial potential \( W(\phi) = \frac{1}{4} \phi^2(1-\phi^2) \)
 + no flow Neumann boundary conditions
-#+name: eq:boundary-conditions
 ** Properties
 :PROPERTIES:
 :html_headline_class: unis-subsection-title
@@ -94,21 +93,6 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 :html_headline_class: unis-section-title
 :reveal_extra_attr: class="unis-blue-background"
 :END:
-** Relaxed Cahn Hilliard equation
-:PROPERTIES:
-:reveal_extra_attr: data-auto-animate
-:html_headline_class: unis-subsection-title
-:END:
-#+name: eq:relaxed-cahn-hilliard
-\begin{equation}
-\begin{aligned}
-\partial_{t}\phi^{\alpha}(x,t) &=  \Delta\mu, \\
-\mu &= - \varepsilon^2 \Delta\phi^{\alpha}  + W'(\phi^{\alpha}),
-\end{aligned}
-\end{equation}
-+ simpler PDE
-+ second order
-
 ** Relaxed Cahn Hilliard equation
 :PROPERTIES:
 :reveal_extra_attr: data-auto-animate
@@ -139,10 +123,6 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 + two dependant equations
 + two one dimensional second order equations
 + solved similar to the baseline equation
-**  Implementation
-+ implicit in \( c \)
-+ solves both equations in tandem
-+ resolving \( c \) during each sub-iteration required
 * Numerical solver
 :PROPERTIES:
 :html_headline_class: unis-section-title
