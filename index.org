@@ -15,22 +15,22 @@
 # #+REVEAL_ROOT: ./reveal.js-master
 
 
-* Table of Contents
+* Outline
 :PROPERTIES:
  :UNNUMBERED: notoc
 :END:
 
 #+reveal_toc:  headlines:1
-* Introduction :noexport:
+* Introduction
 :PROPERTIES:
 :html_headline_class: unis-section-title
 :reveal_extra_attr: class="unis-blue-background"
 :END:
-** rough explanation what CH does
+** Short overview on the CH equation
 + multiphase coupling equation
-+ implicit interface
-+ 2 phase flow
-** animation CH
++ implicit interface approach
++ two phase flow
+** Animation of the phasefield in the CH equation
 [[file:images/iteration.gif]]
 
 * The Cahn-Hilliard equation
@@ -38,7 +38,7 @@
 :html_headline_class: unis-section-title
 :reveal_extra_attr: class="unis-blue-background"
 :END:
-** Cahn-Hilliard Equation:
+** The Cahn-Hilliard Equation:
 :PROPERTIES:
 :reveal_extra_attr: data-auto-animate
 :END:
@@ -48,18 +48,18 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 \begin{equation}
 \begin{aligned}
 \partial_{t}\phi(x,t) &=  \nabla \cdot(M(\phi)\nabla\mu),\\
-\mu &= - \varepsilon^2 \Delta\phi  + W'(\phi), & \text{in} \, \Omega &\times (0,T),\\
--\nabla\mu \cdot \mathbf{n} &= 0\\
-\nabla\phi \cdot \mathbf{n} &= 0 & \text{on} \, \partial\Omega &\times (0,T), \\
-\phi(x,0) &= \phi^0(x) \,, & \text{in} \, \Omega &
+\mu &= - \varepsilon^2 \Delta\phi  + W'(\phi), & &\text{in} \, \Omega \times (0,T),\\
+-\nabla\mu \cdot \mathbf{n} &= 0,\\
+\nabla\phi \cdot \mathbf{n} &= 0, & &\text{on} \, \partial\Omega \times (0,T), \\
+\phi(x,0) &= \phi^0(x) \,, & &\text{in} \, \Omega
 \end{aligned}
 \end{equation}
 
 ** Variables
 #+Reveal_html: <div style="display: flex;justify-content: center;">
-| \( \phi : \Omega \times (0,T) \to \mathbb{R}^d \) | Phase-field *variable*        |
-| \( \mu : \Omega \times (0,T) \to \mathbb{R}^d \) | Chemical potential *variable* |
-| \( \varepsilon > 0 \in \mathbb{R} \)           | Interface coefficient       |
+| \( \phi : \Omega \times (0,T) \to [-1,1] \) | Phase-field *variable*        |
+| \( \mu : \Omega \times (0,T) \to \mathbb{R} \)   | Chemical potential *variable* |
+| \( \varepsilon > 0 \)           | Interface coefficient       |
 | \( W(\phi): [-1,1] \to \mathbb{R}^+ \)  | Double well potential       |
 | \( M(\phi): [-1,1] \to \mathbb{R}^+ \)  | Mobility coefficient        |
 #+reveal_html: </div>
@@ -73,27 +73,27 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 [[file:images/double-well.svg]]
 ** Assumptions
 #+attr_reveal: :frag (appear)
-+ constant mobility \( M(\phi) \equiv 1 \)
-+ polynomial potential \( W(\phi) = \frac{1}{4} \phi^2(1-\phi^2) \)
++ constant mobility: \( M(\phi) \equiv 1 \)
++ polynomial potential: \( W(\phi) = \frac{1}{4} \phi^2(1-\phi^2) \)
 + no flow Neumann boundary conditions
-** Properties
+** Properties of the CH equation
 :PROPERTIES:
 :html_headline_class: unis-subsection-title
 :END:
 #+attr_reveal: :frag (appear)
 + Mass conservative
 + Total energy decreases
-+ phase field equation for two phase flow
++ Phase-field equation for two phase flow
   + diffuse interface equation
   + gives position of phases
-+ 4th order (2 dimensional second order)
-  + expensive
-* Relaxation
++ 4th-order PDE (two dimensional second order)
+  + numerically expensive
+* The relaxation of the CH equation
 :PROPERTIES:
 :html_headline_class: unis-section-title
 :reveal_extra_attr: class="unis-blue-background"
 :END:
-** Relaxed Cahn Hilliard equation
+** The relaxed CH equation
 :PROPERTIES:
 :reveal_extra_attr: data-auto-animate
 :html_headline_class: unis-subsection-title
@@ -106,45 +106,45 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 \end{aligned}
 \end{equation}
 + simpler PDE
-+ second order
++ 2nd-order
 
-** Variables
+** Relaxation variable and parameter
 #+Reveal_html: <div style="display: flex;justify-content: center;">
 | \( \alpha > 0 \) | relaxation parameter |
-| \( c^{\alpha}:\Omega \times (0,T) \to \mathbb{R}^d \)  | solution of an elliptical system |
+| \( c^{\alpha}:\Omega \times (0,T) \to \mathbb{R}\)     | solution of an elliptical system |
 #+Reveal_html: </div>
-** Additional elliptical system to solve for c
+** Additional elliptical system to solve for c^\alpha
 #+name: eq:elliptical-equation
 \begin{align}
 - \Delta c^\alpha  + \alpha c^a &= \alpha \phi ^\alpha,
 \end{align}
 #+attr_reveal: :frag (appear)
-+ requires solving an additional equation for \( c \)
-+ two dependant equations
-+ two one dimensional second order equations
-+ solved similar to the baseline equation
-* Numerical solver
++ Requires solving an additional equation for \( c^\alpha \)
++ Two dependant equations
++ Two one dimensional 2nd-order PDEs
++ Solved similar to the baseline equation
+* Numerical solvers
 :PROPERTIES:
 :html_headline_class: unis-section-title
 :reveal_extra_attr: class="unis-blue-background"
 :END:
 ** Numerical solver
 #+attr_reveal: :frag (appear)
-+ follows Finite Difference Discretization from [cite:@SHIN20117441]
++ follows finite difference discretization from [cite:@SHIN20117441]
 + Implicit in time
 + discretized on NxN grid
 + uses multi-grid scheme
 + derives a linear system from the CH and the relaxed CH equation
-** sketch of baseline solver
+** Sketch of the baseline solver
 [[file:images/Two-grid-scheme.svg]]
-** scetch of the relaxed solver
+** Sketch of the relaxed solver
 [[file:images/Two-grid-scheme-relaxed.svg]]
-* Numerical Experiments
+* Numerical experiments
 :PROPERTIES:
 :html_headline_class: unis-section-title
 :reveal_extra_attr: class="unis-blue-background"
 :END:
-** Explicit solution of c
+** Explicit solution of c^\aplha
 #+REVEAL_HTML: <div style="display: grid; grid-template-columns: 2fr 1fr; padding: 5rem; justify-content: center">
 
 #+caption: explicit solution of c
@@ -154,10 +154,10 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 #+reveal_html: <div>
 #+attr_reveal: :frag (appear)
 + smaller \varepsilon \(\implies\) smaller interface
-+ both \varepsilon and \alpha have efect on interface
-+ explicit solution cannot develop interface
++ both \varepsilon and \alpha have effect on the interface
++ explicit solution cannot develop an interface
 + artefacts for small values of \alpha
-+ ni interface for large \alpha
++ no interface for large \alpha
 #+reveal_html: </div>
 ** Implicit solution of c
 #+REVEAL_HTML: <div style="display: grid; grid-template-columns: 2fr 1fr; padding: 5rem; justify-content: center">
@@ -169,35 +169,35 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 #+attr_reveal: :frag (appear)
 + better at approximating reference
 + at approximately simillar \varepsilon
-+ struggles with wide interface
++ struggles with an wide interface
 + suggests optimal value for \alpha
 #+reveal_html: </div>
-** choice of \( \alpha \) for fixed \( \varepsilon \)
+** Choice of \( \alpha \) for a fixed \( \varepsilon = 0.008 \)
 #+REVEAL_HTML: <div style="display: grid; grid-template-columns: 2fr 1fr; padding: 5rem; justify-content: center">
 #+name: fig:alpha-error
 [[file:images/alpha-error.svg]]
 
 #+reveal_html: <div>
 #+attr_reveal: :frag (appear)
-+ optimal at \(\approx 7.5* 10^5\)
++  \(\alpha_{opt} \approx 7.5* 10^5\)
 #+reveal_html: </div>
-** optimizing \alpha and \varepsilon
-+ We implemented a monte carlo optimizer
+** Optimizing \alpha and \varepsilon
++ We implemented a Monte-Carlo optimizer
   + minimizing \(\phi - \phi^\alpha\) after one timestep
-  + selecting from a Normal distribution around the current optimum
+  + selecting from a normal distribution around the current optimum
   + \(\sigma_\varepsilon = 0.01\)
   + \(\sigma_\alpha = 10000\)
-+ values for alpha were erratic between \(10^5 \to 10^6\)
-+ \varepsilon was simillar to the \varepsilon used in the baselline
-+ suggests \alpha and \varepsilon are independant
++ values for \alpha were erratic between \(10^5 \to 10^6\).
++ \varepsilon was simillar to the \varepsilon used in the baseline.
++ This suggests \alpha and \varepsilon are independent.
 
-** Energy
+** Free energy in the phase-field
 # #+REVEAL_HTML: <div style="display: grid; grid-template-columns: auto auto; padding: 5rem;">
 #+attr_reveal: :frag (appear)
 + The CH equation is related to the following energy functional
-   \[E^{\text{bulk}}[\phi] = \int_{\Omega} \frac{\varepsilon^2}{2} |\nabla \phi |^2 + W(\phi) \, dx  \]
+   \[E^{\text{bulk}}[\phi] = \int_{\Omega} \frac{\varepsilon^2}{2} |\nabla \phi |^2 + W(\phi) \, d \operatorname{\mathbf{x}}  \]
 + The relaxed CH has the following related energy functional similar to the approach in [cite:@CORLI2014773]
-   \[E_{rel}(\phi^{\alpha} , c^\alpha) := \int_{\Omega}  \frac{1}{2}\varepsilon^2 \alpha (c^\alpha - \phi^{\alpha})^2 + W(x) \ d \operatorname{\mathbf{x}} \]
+   \[E_{rel}[\phi^{\alpha} , c^\alpha] := \int_{\Omega}  \frac{1}{2}\varepsilon^2 \alpha (c^\alpha - \phi^{\alpha})^2 + W(\phi) \ d \operatorname{\mathbf{x}} \]
 + Total energy decreases for the CH equation and the relaxed CH equation
    \[\frac{d}{dt}E[\phi(t)]  \stackrel{\partial_n\phi = 0}{=} - \int_{ \Omega } |\nabla \mu|^2 \ d \mathbf{x}, \qquad \forall t \in (0,T) \]
 + Relaxed CH equation should decrease both energy functionals
@@ -217,7 +217,7 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
   + more aggresive
 #+reveal_html: </div>
 
-** mass conservation
+** Mass conservation
 \begin{equation}
 \frac{d}{d t} \int_{\Omega} \phi ~\mathrm{d} \operatorname{\mathbf{x}} = 0
 \end{equation}
@@ -283,7 +283,7 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
   + differences occur mostly with high curvature
 + Relaxed solver depends on optimal \( \alpha \)
 + the elliptical system has to be solved implicitly
-** open points
+** Open points
 + runtime evaluations
 + parallel jacoby solver
   + no multigrid
@@ -359,13 +359,13 @@ W'(\phi_{ij}^n) - 2\phi_{ij}^n
 
 # #+PRINT_BIBLIOGRAPHY:
 
-*** time
+*** Time
 #+caption: Behaviour of both solvers when varying time-step size
 #+name: fig:relaxed-stability-in-time
 [[file:images/relaxed-time-stability.svg]]
 
 
-** solver details
+** Solver details
 *** Discretized form of the CH equation :
 :PROPERTIES:
 :reveal_extra_attr: data-auto-animate
