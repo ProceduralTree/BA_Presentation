@@ -19,7 +19,6 @@
 :PROPERTIES:
  :UNNUMBERED: notoc
 :END:
-
 #+reveal_toc:  headlines:1
 * Introduction
 :PROPERTIES:
@@ -27,13 +26,13 @@
 :reveal_extra_attr: class="unis-blue-background"
 :END:
 ** Short overview on the CH equation
-+ multiphase coupling equation
-+ implicit interface approach
-+ two phase flow
++ Multiphase coupling equation
++ Implicit interface approach
++ Two phase flow
 ** Animation of the phasefield in the CH equation
 [[file:images/iteration.gif]]
 
-* The Cahn-Hilliard equation
+* The Cahn-Hilliard (CH) equation
 :PROPERTIES:
 :html_headline_class: unis-section-title
 :reveal_extra_attr: class="unis-blue-background"
@@ -54,7 +53,7 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 \phi(x,0) &= \phi^0(x) \,, & &\text{in} \, \Omega
 \end{aligned}
 \end{equation}
-
+[cite:@Wu_2022]
 ** Variables
 #+Reveal_html: <div style="display: flex;justify-content: center;">
 | \( \phi : \Omega \times (0,T) \to [-1,1] \) | Phase-field *variable*        |
@@ -73,9 +72,9 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 [[file:images/double-well.svg]]
 ** Assumptions
 #+attr_reveal: :frag (appear)
-+ constant mobility: \( M(\phi) \equiv 1 \)
-+ polynomial potential: \( W(\phi) = \frac{1}{4} \phi^2(1-\phi^2) \)
-+ no flow Neumann boundary conditions
++ Constant mobility: \( M(\phi) \equiv 1 \)
++ Polynomial potential: \( W(\phi) = \frac{1}{4} \phi^2(1-\phi^2) \)
++ No flow Neumann boundary conditions
 ** Properties of the CH equation
 :PROPERTIES:
 :html_headline_class: unis-subsection-title
@@ -88,7 +87,7 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
   + gives position of phases
 + 4th-order PDE (two dimensional second order)
   + numerically expensive
-* The relaxation of the CH equation
+* The relaxed CH equation
 :PROPERTIES:
 :html_headline_class: unis-section-title
 :reveal_extra_attr: class="unis-blue-background"
@@ -105,7 +104,7 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 \mu &= \varepsilon ^2 \alpha(c^\alpha - \phi^\alpha) + W'(\phi^{\alpha}) .
 \end{aligned}
 \end{equation}
-+ simpler PDE
++ Simpler PDE
 + 2nd-order
 
 ** Relaxation variable and parameter
@@ -130,11 +129,11 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 :END:
 ** Numerical solver
 #+attr_reveal: :frag (appear)
-+ follows finite difference discretization from [cite:@SHIN20117441]
++ Follows finite difference discretization from [cite:@SHIN20117441]
 + Implicit in time
-+ discretized on NxN grid
-+ uses multi-grid scheme
-+ derives a linear system from the CH and the relaxed CH equation
++ Discretized on NxN grid
++ Uses multi-grid scheme
++ Derives a linear system from the CH and the relaxed CH equation
 ** Sketch of the baseline solver
 [[file:images/Two-grid-scheme.svg]]
 ** Sketch of the relaxed solver
@@ -153,11 +152,11 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 
 #+reveal_html: <div>
 #+attr_reveal: :frag (appear)
-+ smaller \varepsilon \(\implies\) smaller interface
-+ both \varepsilon and \alpha have effect on the interface
-+ explicit solution cannot develop an interface
-+ artefacts for small values of \alpha
-+ no interface for large \alpha
++ Smaller \varepsilon \(\implies\) smaller interface
++ Both \varepsilon and \alpha have effect on the interface.
++ Explicit solution cannot develop an interface.
++ Artefacts for small values of \alpha
++ No interface for large \alpha
 #+reveal_html: </div>
 ** Implicit solution of c
 #+REVEAL_HTML: <div style="display: grid; grid-template-columns: 2fr 1fr; padding: 5rem; justify-content: center">
@@ -167,10 +166,10 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 
 #+reveal_html: <div>
 #+attr_reveal: :frag (appear)
-+ better at approximating reference
-+ at approximately simillar \varepsilon
-+ struggles with an wide interface
-+ suggests optimal value for \alpha
++ Better at approximating reference
++ At approximately simillar \varepsilon
++ Struggles with an wide interface
++ Suggests optimal value for \alpha
 #+reveal_html: </div>
 ** Choice of \( \alpha \) for a fixed \( \varepsilon = 0.008 \)
 #+REVEAL_HTML: <div style="display: grid; grid-template-columns: 2fr 1fr; padding: 5rem; justify-content: center">
@@ -187,7 +186,7 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
   + selecting from a normal distribution around the current optimum
   + \(\sigma_\varepsilon = 0.01\)
   + \(\sigma_\alpha = 10000\)
-+ values for \alpha were erratic between \(10^5 \to 10^6\).
++ Values for \alpha were erratic between \(10^5 \to 10^6\).
 + \varepsilon was simillar to the \varepsilon used in the baseline.
 + This suggests \alpha and \varepsilon are independent.
 
@@ -197,10 +196,10 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 + The CH equation is related to the following energy functional
    \[E^{\text{bulk}}[\phi] = \int_{\Omega} \frac{\varepsilon^2}{2} |\nabla \phi |^2 + W(\phi) \, d \operatorname{\mathbf{x}}  \]
 + The relaxed CH has the following related energy functional similar to the approach in [cite:@CORLI2014773]
-   \[E_{rel}[\phi^{\alpha} , c^\alpha] := \int_{\Omega}  \frac{1}{2}\varepsilon^2 \alpha (c^\alpha - \phi^{\alpha})^2 + W(\phi) \ d \operatorname{\mathbf{x}} \]
+   \[E_{rel}[\phi^{\alpha} , c^\alpha] := \int_{\Omega}  \frac{1}{2}\varepsilon^2 \alpha (c^\alpha - \phi^{\alpha})^2 + W(\phi^{\alpha}) \ d \operatorname{\mathbf{x}} \]
 + Total energy decreases for the CH equation and the relaxed CH equation
    \[\frac{d}{dt}E[\phi(t)]  \stackrel{\partial_n\phi = 0}{=} - \int_{ \Omega } |\nabla \mu|^2 \ d \mathbf{x}, \qquad \forall t \in (0,T) \]
-+ Relaxed CH equation should decrease both energy functionals
++ \( E^{bulk} \) and \( E_{rel} \) should decrease in time for \( \phi^{\alpha} \).
 
 ** Baseline and relaxed energy decay
 #+REVEAL_HTML: <div style="display: grid; grid-template-columns: 2fr 1fr; padding: 5rem; justify-content: center">
@@ -209,19 +208,20 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 [[file:images/relaxed-energy-balance.svg]]
 #+reveal_html: <div>
 #+attr_reveal: :frag (appear)
-+ both solvers exhibit energy decay
-+ visually less interface surface
-+ initially fast decay
++ Both solvers exhibit energy decay
++ Visually less interface surface
++ Initially fast decay
   + sharp initial conditions
-+ relaxed decays faster
++ Relaxed decays faster
   + more aggresive
 #+reveal_html: </div>
 
 ** Mass conservation
++ As continuous version of mass we use:
 \begin{equation}
 \frac{d}{d t} \int_{\Omega} \phi ~\mathrm{d} \operatorname{\mathbf{x}} = 0
 \end{equation}
-+ Discrete versions should satisfy
++ Discrete versions should satisfy:
 \begin{equation}
 \sum_{i,j \in \Omega} \frac{\phi_{ij}^{n} - \phi_{ij}^{n+1}}{\Delta t} = 0
 \end{equation}
@@ -232,8 +232,8 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 [[file:images/mass_balance.svg]]
 #+reveal_html: <div>
 #+attr_reveal: :frag (appear)
-+ machine precision
-+ mass conservative
++ Machine precision
++ Mass conservative
 #+reveal_html: </div>
 #+Reveal: split
 #+caption: relaxed mass behavior
@@ -241,7 +241,7 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 [[file:images/relaxed-mass-balance.svg]]
 #+reveal_html: <div>
 #+attr_reveal: :frag (appear)
-+ far from machine precision \(0.01 >> 10^{-16}\)
++ Far from machine precision \(0.01 >> 10^{-16}\)
 #+reveal_html: </div>
 ** Sub iteration
 #+REVEAL_HTML: <div style="display: grid; grid-template-columns: 2fr 1fr; padding: 5rem; justify-content: center">
@@ -250,10 +250,10 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 [[file:images/relaxed-convergence.svg]]
 #+reveal_html: <div>
 #+attr_reveal: :frag (appear)
-+ relaxed solver uses more subiterations
++ Relaxed solver uses more subiterations
   + each sub iteration was faster in experiments
-+ relaxed solver might not converge  correct
-+ both solvers take comparable wall time
++ Relaxed solver might not converge  correct
++ Both solvers take comparable wall time
 #+reveal_html: </div>
 ** Direct comparison of the baseline solver with the relaxed solver
 #+REVEAL_HTML: <div style="display: grid; grid-template-rows: 2fr 1fr; padding: 5rem; justify-content: center">
@@ -262,11 +262,11 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 [[file:images/relaxed-comparison.gif]]
 #+reveal_html: <div>
 #+attr_reveal: :frag (appear)
-+ cherry picked example with visual difference
-+ difference largest in the beginning
++ Cherry picked example with visual difference
++ Difference largest in the beginning
   + has to smooth sharp initial condition
-+ differences largest in areas with high curvature
-+ behavior similar
++ Differences largest in areas with high curvature
++ Behavior similar
   + except for mass conservation
 #+reveal_html: </div>
 
@@ -277,17 +277,17 @@ The aim of the CH equation is to find solutions \( \phi(\vec{x} , t) , \mu(\vec{
 :reveal_extra_attr: class="unis-blue-background"
 :END:
 #+Reveal: split
-+ Baseline is mass conservative
-+ Relaxed solver is not
-+ Results are qualitatively similar
++ Baseline is mass conservative.
++ Relaxed solver is not mass conservative.
++ Results are qualitatively similar.
   + differences occur mostly with high curvature
-+ Relaxed solver depends on optimal \( \alpha \)
-+ the elliptical system has to be solved implicitly
++ Relaxed solver depends on optimal \( \alpha \).
++ The elliptical system has to be solved implicitly.
 ** Open points
-+ runtime evaluations
-+ parallel jacoby solver
-  + no multigrid
-+ analytical convergence of the relaxation
++ Runtime evaluations
++ Parallel Jacoby solver
+  + no multi-grid
++ Analytical convergence of the relaxation
 
 * References
 #+print_bibliography:
